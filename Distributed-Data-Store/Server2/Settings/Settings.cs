@@ -1,8 +1,8 @@
-﻿namespace PartitionLeader.Settings;
+﻿namespace Server2.Settings;
 
 public static class Settings
 {
-    public static readonly bool Leader = true;
+    public static readonly bool Leader = false;
     
     public static readonly string ClientUrl = "http://host.docker.internal:7139"; //docker
     // public static readonly string ClientUrl = "https://localhost:7139"; //local
