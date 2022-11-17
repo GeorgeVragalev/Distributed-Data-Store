@@ -1,4 +1,5 @@
 ﻿using PartitionLeader.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace PartitionLeader.Repositories;
 
@@ -10,33 +11,33 @@ public class DataStorage : IDataStorage
     {
         _dataRepository = dataRepository;
     }
-    
-    public Data? GetById(int id)
+
+    public KeyValuePair<int, Data> GetById(int id)
     {
         return _dataRepository.GetById(id);
     }
 
-    public IList<Data> GetAll()
+    public IDictionary<int, Data> GetAll()
     {
         return _dataRepository.GetAll();
     }
 
-    public void Save(Data entity)
+    public void Save(int id, Data data)
     {
-        _dataRepository.Save(entity);
+        _dataRepository.Save(id, data);
     }
 
-    public Data Update(Data entity)
+    public Data Update(int id, Data data)
     {
-        return _dataRepository.Update(entity);
+        return _dataRepository.Update(id, data);
     }
 
-    public void Delete(Data entity)
+    public void Delete(int id)
     {
-        _dataRepository.Delete(entity);
+        _dataRepository.Delete(id);
     }
 
-    public bool DoesKeyExist(Data data)
+    public bool DoesKeyExist(int id)
     {
         throw new NotImplementedException();
     }
