@@ -1,4 +1,4 @@
-﻿namespace PartitionLeader.Models;
+﻿namespace Server1.Models;
 
 public class Data : Entity
 {

@@ -1,4 +1,5 @@
-﻿using PartitionLeader.Models;
+﻿using PartitionLeader.Configurations;
+using PartitionLeader.Models;
 
 namespace PartitionLeader.Repositories.SharedStorage;
 
@@ -16,10 +17,14 @@ public class StorageRepository <T> : IStorageRepository<T> where T : Entity
         return _storage;
     }
 
-    public Task Save(int id, T entity)
+    public Task<ResultSummary> Save(int id, T entity)
     {
         _storage.Add(id, entity);
-        return Task.CompletedTask;
+        return Task.FromResult(new ResultSummary()
+        {
+            StorageCount = _storage.Count,
+            LastProcessedId = id
+        });
     }
 
     public Task<T> Update(int id, T entity)
@@ -27,9 +32,13 @@ public class StorageRepository <T> : IStorageRepository<T> where T : Entity
         return Task.FromResult(_storage[id] = entity);;
     }
 
-    public Task Delete(int id)
+    public Task<ResultSummary> Delete(int id)
     {
-        _storage.Remove(id);
-        return Task.CompletedTask;
+        _storage.Remove(id); 
+        return Task.FromResult(new ResultSummary()
+        {
+            StorageCount = _storage.Count,
+            LastProcessedId = id
+        });;
     }
 }

@@ -1,4 +1,4 @@
-﻿using Server1.Services;
+﻿using Server1.Services.SyncService;
 
 namespace Server1.BackgroundTask;
 
@@ -24,7 +24,7 @@ public class BackgroundTask : BackgroundService
         using (var scope = _serviceScopeFactory.CreateScope())
         {
             var scoped = scope.ServiceProvider.GetRequiredService<ISyncService>();
-            scoped.SyncData(stoppingToken);
+            await scoped.SyncData(stoppingToken);
         }
     }
 }

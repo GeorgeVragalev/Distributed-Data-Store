@@ -1,4 +1,4 @@
-using PartitionLeader.Settings;
+using Server1.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 

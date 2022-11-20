@@ -1,8 +1,8 @@
-﻿using PartitionLeader.Helpers;
-using PartitionLeader.Models;
-using PartitionLeader.Repositories.DataStorage;
+﻿using Server1.Helpers;
+using Server1.Models;
+using Server1.Repositories.DataStorage;
 
-namespace PartitionLeader.Services.DataService;
+namespace Server1.Services.DataService;
 
 public class DataService : IDataService
 {
@@ -23,10 +23,10 @@ public class DataService : IDataService
         return _dataStorage.GetAll();
     }
 
-    public async Task<ResultSummary> Save(Data data)
+    public async Task Save(Data data)
     {
         var id = IdGenerator.GenerateId();
-        return await _dataStorage.Save(id, data);
+        await _dataStorage.Save(id, data);
     }
 
     public Task<Data> Update(int id, Data data)
@@ -34,9 +34,9 @@ public class DataService : IDataService
         return _dataStorage.Update(id, data);
     }
 
-    public async Task<ResultSummary> Delete(int id)
+    public async Task Delete(int id)
     {
-        return await _dataStorage.Delete(id);
+        await _dataStorage.Delete(id);
     }
 
     public Task<bool> DoesKeyExist(int id)

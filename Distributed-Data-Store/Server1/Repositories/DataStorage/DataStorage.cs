@@ -1,7 +1,7 @@
-﻿using PartitionLeader.Models;
-using PartitionLeader.Repositories.SharedStorage;
+﻿using Server1.Models;
+using Server1.Repositories.SharedStorage;
 
-namespace PartitionLeader.Repositories.DataStorage;
+namespace Server1.Repositories.DataStorage;
 
 public class DataStorage : IDataStorage
 {
@@ -22,9 +22,9 @@ public class DataStorage : IDataStorage
         return _dataRepository.GetAll();
     }
 
-    public async Task<ResultSummary> Save(int id, Data data)
+    public async Task Save(int id, Data data)
     {
-        return await _dataRepository.Save(id, data);
+        await _dataRepository.Save(id, data);
     }
 
     public async Task<Data> Update(int id, Data data)
@@ -32,9 +32,9 @@ public class DataStorage : IDataStorage
         return await _dataRepository.Update(id, data);
     }
 
-    public async Task<ResultSummary> Delete(int id)
+    public async Task Delete(int id)
     {
-        return await _dataRepository.Delete(id);
+        await _dataRepository.Delete(id);
     }
 
     public Task<bool> DoesKeyExist(int id)

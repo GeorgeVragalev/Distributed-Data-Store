@@ -1,12 +1,12 @@
-﻿using PartitionLeader.Models;
+﻿using Server1.Models;
 
-namespace PartitionLeader.Repositories.SharedStorage;
+namespace Server1.Repositories.SharedStorage;
 
 public interface IStorageRepository <T> where T : Entity
 {
     public KeyValuePair<int, T> GetById(int id);
     public IDictionary<int, T> GetAll();
-    public Task<ResultSummary> Save(int id, T entity);
+    public Task Save(int id, T entity);
     public Task<T> Update(int id, T entity);
-    public Task<ResultSummary> Delete(int id);
+    public Task Delete(int id);
 }

@@ -1,11 +1,10 @@
-﻿using PartitionLeader.Models;
-using PartitionLeader.Repositories.DataStorage;
-using PartitionLeader.Repositories.SharedStorage;
-using PartitionLeader.Services;
-using PartitionLeader.Services.DataService;
-using PartitionLeader.Services.SyncService;
+﻿using Server1.Repositories.DataStorage;
+using Server1.Repositories.SharedStorage;
+using Server1.Services.DataService;
+using Server1.Services.DistributionService;
+using Server1.Services.SyncService;
 
-namespace PartitionLeader.Settings;
+namespace Server1.Configurations;
 public class Startup
 {
     private IConfiguration ConfigRoot { get; }
@@ -18,10 +17,11 @@ public class Startup
         services.AddSwaggerGen();
         services.AddLogging(config => config.ClearProviders());
         
-        services.AddScoped<ISyncService, SyncService>();
-        services.AddScoped<IDataService, DataService>();
-        services.AddScoped<IDataStorage, DataStorage>();
-        services.AddScoped(typeof(IStorageRepository<>), typeof(StorageRepository<>));
+        services.AddSingleton<ISyncService, SyncService>();
+        services.AddSingleton<IDataService, DataService>();
+        services.AddSingleton<IDataStorage, DataStorage>();
+        services.AddSingleton<IDistributionService, DistributionService>();
+        services.AddSingleton(typeof(IStorageRepository<>), typeof(StorageRepository<>));
         services.AddHostedService<BackgroundTask.BackgroundTask>();
     }
 

@@ -25,7 +25,7 @@ public class BackgroundTask : BackgroundService
         using (var scope = _serviceScopeFactory.CreateScope())
         {
             var scoped = scope.ServiceProvider.GetRequiredService<ISyncService>();
-            scoped.SyncData(stoppingToken);
+            await scoped.SyncData(stoppingToken);
         }
     }
 }

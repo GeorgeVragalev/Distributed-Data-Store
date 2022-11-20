@@ -1,6 +1,11 @@
-﻿using Server1.Services;
+﻿using PartitionLeader.Repositories.DataStorage;
+using PartitionLeader.Repositories.SharedStorage;
+using PartitionLeader.Services.DataService;
+using PartitionLeader.Services.DistributionService;
+using PartitionLeader.Services.Http;
+using PartitionLeader.Services.SyncService;
 
-namespace Server1.Settings;
+namespace PartitionLeader.Configurations;
 public class Startup
 {
     private IConfiguration ConfigRoot { get; }
@@ -14,6 +19,11 @@ public class Startup
         services.AddLogging(config => config.ClearProviders());
         
         services.AddSingleton<ISyncService, SyncService>();
+        services.AddSingleton<IDataService, DataService>();
+        services.AddSingleton<IDataStorage, DataStorage>();
+        services.AddSingleton<IDistributionService, DistributionService>();
+        services.AddSingleton<IHttpService, HttpService>();
+        services.AddSingleton(typeof(IStorageRepository<>), typeof(StorageRepository<>));
         services.AddHostedService<BackgroundTask.BackgroundTask>();
     }
 
