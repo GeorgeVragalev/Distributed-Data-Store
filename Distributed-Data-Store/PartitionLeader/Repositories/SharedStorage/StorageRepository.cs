@@ -7,14 +7,14 @@ public class StorageRepository <T> : IStorageRepository<T> where T : Entity
 {
     private IDictionary<int, T> _storage = new Dictionary<int, T>();
 
-    public KeyValuePair<int, T> GetById(int id)
+    public Task<KeyValuePair<int, T>> GetById(int id)
     {
-        return _storage.FirstOrDefault(s=>s.Key==id);
+        return Task.FromResult(_storage.FirstOrDefault(s=>s.Key==id));
     }
 
-    public IDictionary<int, T> GetAll()
+    public Task<IDictionary<int, T>> GetAll()
     {
-        return _storage;
+        return Task.FromResult(_storage);
     }
 
     public Task<ResultSummary> Save(int id, T entity)
@@ -29,7 +29,15 @@ public class StorageRepository <T> : IStorageRepository<T> where T : Entity
 
     public Task<T> Update(int id, T entity)
     {
-        return Task.FromResult(_storage[id] = entity);;
+        try
+        {
+            _storage[id] = entity;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        return Task.FromResult(entity);
     }
 
     public Task<ResultSummary> Delete(int id)

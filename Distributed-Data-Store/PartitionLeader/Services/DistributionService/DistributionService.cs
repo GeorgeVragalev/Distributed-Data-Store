@@ -2,12 +2,63 @@
 using System.Net.Sockets;
 using System.Text;
 using PartitionLeader.Configurations;
+using PartitionLeader.Models;
+using PartitionLeader.Services.DataService;
+using PartitionLeader.Services.Http;
 
 namespace PartitionLeader.Services.DistributionService;
 
 public class DistributionService : IDistributionService
 {
+    private readonly IDataService _dataService;
+    private readonly IHttpService _httpService;
 
+    public DistributionService(IDataService dataService, IHttpService httpService)
+    {
+        _dataService = dataService;
+        _httpService = httpService;
+    }
+
+    public async Task<KeyValuePair<int, Data>?> GetById(int id)
+    {
+        //try get from local storage if not get from clusters
+        var res =  await _dataService.GetById(id);
+        if (res.Value.Value == null)
+        {
+            res = await _httpService.GetById(id, Settings.Server1);
+        }
+
+        return res;
+    }
+    
+    public async Task<IDictionary<int, Data>?> GetAll()
+    {
+        return await _dataService.GetAll();
+    }
+    
+    public async Task<Data> Update(int id, Data data)
+    {
+        return await _dataService.Update(id, data);
+    }
+
+    public async Task<ResultSummary> Save(Data data)
+    {
+        var url = StorageHelper.GetOptimalServerUrl();
+        
+        var result =  await _dataService.Save(data);
+        result.UpdateServerStatus();
+        return result;
+    }
+
+    public async Task<ResultSummary> Delete(int id)
+    {
+        var result =  await _dataService.Delete(id);
+        result.UpdateServerStatus();
+        return result;
+    }
+
+    
+    
     public void Client()
     {
         TcpClient client = new TcpClient(Settings.ServerIP, Settings.Port);

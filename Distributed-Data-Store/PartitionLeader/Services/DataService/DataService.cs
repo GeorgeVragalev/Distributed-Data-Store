@@ -13,14 +13,14 @@ public class DataService : IDataService
         _dataStorage = dataStorage;
     }
 
-    public KeyValuePair<int, Data> GetById(int id)
+    public async Task<KeyValuePair<int, Data>?> GetById(int id)
     {
-        return _dataStorage.GetById(id);
+        return await _dataStorage.GetById(id);
     }
 
-    public IDictionary<int, Data> GetAll()
+    public async Task<IDictionary<int, Data>?> GetAll()
     {
-        return _dataStorage.GetAll();
+        return await _dataStorage.GetAll();
     }
 
     public async Task<ResultSummary> Save(Data data)

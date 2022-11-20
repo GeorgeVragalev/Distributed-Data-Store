@@ -1,6 +1,8 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using PartitionLeader.Configurations;
+using PartitionLeader.Helpers;
 using PartitionLeader.Models;
 using PartitionLeader.Services.DataService;
 using PartitionLeader.Services.Http;
@@ -21,15 +23,15 @@ public class ServerController : ControllerBase
     }
 
     [HttpGet("/get/{id}")]
-    public async Task<KeyValuePair<int, Data>> GetById([FromRoute] int id)
+    public async Task<KeyValuePair<int, Data>?> GetById([FromRoute] int id)
     {
-        return await Task.FromResult(_dataService.GetById(id));
+        return await _dataService.GetById(id);
     }
     
     [HttpGet("/all")]
-    public async Task<IDictionary<int, Data>> GetAll()
+    public async Task<IDictionary<int, Data>?> GetAll()
     {
-        return await Task.FromResult(_dataService.GetAll());
+        return await _dataService.GetAll();
     }
     
     [HttpPut("/update/{id}")]
@@ -41,15 +43,19 @@ public class ServerController : ControllerBase
     [HttpPost]
     public async Task<ResultSummary> Save([FromForm] Data data)
     {
-        var url = StorageStatus.GetOptimalServerUrl();
+        var url = StorageHelper.GetOptimalServerUrl();
+
         var result =  await _dataService.Save(data);
-        
+        var a = _httpService.GetById(1, Settings.ThisServerUrl);
+        result.UpdateServerStatus();
         return result;
     }
 
     [HttpDelete("/delete/{id}")]
     public async Task<ResultSummary> Delete([FromRoute] int id)
     {
-        return await _dataService.Delete(id);
+        var result =  await _dataService.Delete(id);
+        result.UpdateServerStatus();
+        return result;
     }
 }

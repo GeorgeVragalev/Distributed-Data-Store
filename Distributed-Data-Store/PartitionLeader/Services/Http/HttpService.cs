@@ -11,9 +11,6 @@ public class HttpService : IHttpService
     {
         try
         {
-            var json = JsonConvert.SerializeObject(id);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-
             using var client = new HttpClient();
 
             var response = await client.GetAsync($"{url}/get/{id}");
@@ -85,7 +82,7 @@ public class HttpService : IHttpService
 
             using var client = new HttpClient();
 
-            var response = await client.PostAsync($"{url}" , content);
+            var response = await client.PostAsync($"{url}", content);
             
             var dataAsJson = await response.Content.ReadAsStringAsync();
             var deserialized = JsonConvert.DeserializeObject<ResultSummary>(dataAsJson);

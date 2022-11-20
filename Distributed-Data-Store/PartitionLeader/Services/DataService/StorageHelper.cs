@@ -3,7 +3,7 @@ using PartitionLeader.Models;
 
 namespace PartitionLeader.Services.DataService;
 
-public static class StorageStatus
+public static class StorageHelper
 {
     public static ResultSummary PartitionLeaderStatus = new ResultSummary(){
         StorageCount = 0,
@@ -37,7 +37,7 @@ public static class StorageStatus
         return $"{Settings.BaseUrl}{optimalServer.Port}";
     }
 
-    public static void UpdateServerStatus(ResultSummary summary)
+    public static void UpdateServerStatus(this ResultSummary summary)
     {
         switch (summary.ServerName)
         {

@@ -8,12 +8,11 @@ public static class Settings
     
     public static readonly bool Leader = true;
     public static readonly string ServerIP = "localhost";  
-    public static readonly int Port = 7112;  
-    
-    // public static readonly string ThisServerUrl = "http://host.docker.internal:5112"; //docker
-    
+    public static readonly int Port = 7112;
     public static readonly string BaseUrl = $"https://localhost:"; //local
-    
+
+    public static readonly string ThisServerUrl = $"https://localhost:{7112}"; //docker
+
     public static readonly string PartitionLeader = $"https://localhost:{7112}"; //local
     public static readonly string Server1 = $"https://localhost:{7173}"; //local
     public static readonly string Server2 = $"https://localhost:{7156}"; //local
