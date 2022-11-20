@@ -5,9 +5,10 @@ namespace PartitionLeader.Repositories.DataStorage;
 
 public class DataStorage : IDataStorage
 {
-    private readonly StorageRepository<Data> _dataRepository;
+    private readonly IStorageRepository<Data> _dataRepository;
 
-    public DataStorage(StorageRepository<Data> dataRepository)
+
+    public DataStorage(IStorageRepository<Data> dataRepository)
     {
         _dataRepository = dataRepository;
     }
@@ -22,23 +23,23 @@ public class DataStorage : IDataStorage
         return _dataRepository.GetAll();
     }
 
-    public void Save(int id, Data data)
+    public async Task Save(int id, Data data)
     {
-        _dataRepository.Save(id, data);
+        await _dataRepository.Save(id, data);
     }
 
-    public Data Update(int id, Data data)
+    public async Task<Data> Update(int id, Data data)
     {
-        return _dataRepository.Update(id, data);
+        return await _dataRepository.Update(id, data);
     }
 
-    public void Delete(int id)
+    public async Task Delete(int id)
     {
-        _dataRepository.Delete(id);
+        await _dataRepository.Delete(id);
     }
 
-    public bool DoesKeyExist(int id)
+    public Task<bool> DoesKeyExist(int id)
     {
-        return _dataRepository.GetAll().ContainsKey(id);
+        return Task.FromResult(_dataRepository.GetAll().ContainsKey(id));
     }
 }

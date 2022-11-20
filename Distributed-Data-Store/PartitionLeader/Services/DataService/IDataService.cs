@@ -4,5 +4,5 @@ namespace PartitionLeader.Services.DataService;
 
 public interface IDataService : IStorageService<Data>
 {
-    public bool DoesKeyExist(int id);
+    public Task<bool> DoesKeyExist(int id);
 }

@@ -5,5 +5,5 @@ namespace PartitionLeader.Repositories.DataStorage;
 
 public interface IDataStorage : IStorageRepository<Data>
 {
-    public bool DoesKeyExist(int id);
+    public Task<bool> DoesKeyExist(int id);
 }

@@ -1,4 +1,8 @@
-﻿using PartitionLeader.Services;
+﻿using PartitionLeader.Models;
+using PartitionLeader.Repositories.DataStorage;
+using PartitionLeader.Repositories.SharedStorage;
+using PartitionLeader.Services;
+using PartitionLeader.Services.DataService;
 using PartitionLeader.Services.SyncService;
 
 namespace PartitionLeader.Settings;
@@ -14,7 +18,10 @@ public class Startup
         services.AddSwaggerGen();
         services.AddLogging(config => config.ClearProviders());
         
-        services.AddSingleton<ISyncService, SyncService>();
+        services.AddScoped<ISyncService, SyncService>();
+        services.AddScoped<IDataService, DataService>();
+        services.AddScoped<IDataStorage, DataStorage>();
+        services.AddScoped(typeof(IStorageRepository<>), typeof(StorageRepository<>));
         services.AddHostedService<BackgroundTask.BackgroundTask>();
     }
 

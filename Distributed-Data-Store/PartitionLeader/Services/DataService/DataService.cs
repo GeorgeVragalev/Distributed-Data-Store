@@ -23,23 +23,23 @@ public class DataService : IDataService
         return _dataStorage.GetAll();
     }
 
-    public void Save(Data data)
+    public async Task Save(Data data)
     {
         var id = IdGenerator.GenerateId();
-        _dataStorage.Save(id, data);
+        await _dataStorage.Save(id, data);
     }
 
-    public Data Update(int id, Data data)
+    public Task<Data> Update(int id, Data data)
     {
         return _dataStorage.Update(id, data);
     }
 
-    public void Delete(int id)
+    public async Task Delete(int id)
     {
-        _dataStorage.Delete(id);
+        await _dataStorage.Delete(id);
     }
 
-    public bool DoesKeyExist(int id)
+    public Task<bool> DoesKeyExist(int id)
     {
         return _dataStorage.DoesKeyExist(id);
     }

@@ -6,7 +6,7 @@ public interface IStorageService <T> where T : Entity
 {
     public KeyValuePair<int, T> GetById(int id);
     public IDictionary<int, T> GetAll();
-    public void Save(T entity);
-    public T Update(int id, T entity);
-    public void Delete(int id);
+    public Task Save(T entity);
+    public Task<T> Update(int id, T entity);
+    public Task Delete(int id);
 }

@@ -4,10 +4,8 @@ public static class Settings
 {
     public static readonly bool Leader = true;
     
-    public static readonly string ClientUrl = "http://host.docker.internal:7139"; //docker
-    // public static readonly string ClientUrl = "https://localhost:7139"; //local
-    
-    public static readonly int TimeUnit = 1; //seconds = 1000  ms = 1 minutes = 60000 
+    // public static readonly string ThisServerUrl = "http://host.docker.internal:5112"; //docker
+    public static readonly string ThisServerUrl = "https://localhost:5112"; //local
 }
 /*
 to run docker for dininghall container: 

@@ -16,18 +16,20 @@ public class StorageRepository <T> : IStorageRepository<T> where T : Entity
         return _storage;
     }
 
-    public void Save(int id, T entity)
+    public Task Save(int id, T entity)
     {
         _storage.Add(id, entity);
+        return Task.CompletedTask;
     }
 
-    public T Update(int id, T entity)
+    public Task<T> Update(int id, T entity)
     {
-        return _storage[id] = entity;;
+        return Task.FromResult(_storage[id] = entity);;
     }
 
-    public void Delete(int id)
+    public Task Delete(int id)
     {
         _storage.Remove(id);
+        return Task.CompletedTask;
     }
 }

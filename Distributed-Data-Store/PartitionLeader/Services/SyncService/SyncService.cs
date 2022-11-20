@@ -2,7 +2,7 @@
 
 public class SyncService : ISyncService
 {
-    public void SyncData(CancellationToken cancellationToken)
+    public async Task SyncData(CancellationToken cancellationToken)
     {
         //sync all data between clusters
     }

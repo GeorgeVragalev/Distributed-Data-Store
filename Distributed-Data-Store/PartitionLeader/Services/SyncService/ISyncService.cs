@@ -2,5 +2,5 @@
 
 public interface ISyncService
 {
-    public void SyncData(CancellationToken cancellationToken);
+    public Task SyncData(CancellationToken cancellationToken);
 }
