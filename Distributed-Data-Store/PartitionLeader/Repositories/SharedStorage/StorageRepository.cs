@@ -1,7 +1,6 @@
 ﻿using PartitionLeader.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace PartitionLeader.Repositories;
+namespace PartitionLeader.Repositories.SharedStorage;
 
 public class StorageRepository <T> : IStorageRepository<T> where T : Entity
 {

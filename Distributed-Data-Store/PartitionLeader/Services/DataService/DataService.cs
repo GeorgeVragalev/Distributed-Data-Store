@@ -1,8 +1,8 @@
 ﻿using PartitionLeader.Helpers;
 using PartitionLeader.Models;
-using PartitionLeader.Repositories;
+using PartitionLeader.Repositories.DataStorage;
 
-namespace PartitionLeader.Services;
+namespace PartitionLeader.Services.DataService;
 
 public class DataService : IDataService
 {

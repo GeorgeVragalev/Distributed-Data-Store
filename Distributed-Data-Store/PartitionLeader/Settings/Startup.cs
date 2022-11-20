@@ -1,4 +1,5 @@
 ﻿using PartitionLeader.Services;
+using PartitionLeader.Services.SyncService;
 
 namespace PartitionLeader.Settings;
 public class Startup

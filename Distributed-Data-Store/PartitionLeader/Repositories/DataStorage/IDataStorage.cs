@@ -1,6 +1,7 @@
 ﻿using PartitionLeader.Models;
+using PartitionLeader.Repositories.SharedStorage;
 
-namespace PartitionLeader.Repositories;
+namespace PartitionLeader.Repositories.DataStorage;
 
 public interface IDataStorage : IStorageRepository<Data>
 {

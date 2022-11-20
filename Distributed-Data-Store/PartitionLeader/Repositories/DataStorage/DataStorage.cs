@@ -1,7 +1,7 @@
 ﻿using PartitionLeader.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using PartitionLeader.Repositories.SharedStorage;
 
-namespace PartitionLeader.Repositories;
+namespace PartitionLeader.Repositories.DataStorage;
 
 public class DataStorage : IDataStorage
 {
@@ -39,6 +39,6 @@ public class DataStorage : IDataStorage
 
     public bool DoesKeyExist(int id)
     {
-        throw new NotImplementedException();
+        return _dataRepository.GetAll().ContainsKey(id);
     }
 }
