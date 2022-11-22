@@ -1,0 +1,6 @@
+﻿namespace Server1.Models;
+
+public class DataModel : Entity
+{
+    public IFormFile File { get; set; }
+}

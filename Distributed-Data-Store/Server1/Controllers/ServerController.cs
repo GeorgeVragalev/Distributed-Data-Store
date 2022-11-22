@@ -1,9 +1,9 @@
-﻿using System.Net.Sockets;
-using System.Text;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Server1.Configurations;
+using Server1.Helpers;
 using Server1.Models;
 using Server1.Services.DataService;
+using Server1.Services.Http;
 
 namespace Server1.Controllers;
 
@@ -12,49 +12,50 @@ namespace Server1.Controllers;
 public class ServerController : ControllerBase
 {
     private readonly IDataService _dataService;
+    private readonly IHttpService _httpService;
 
-    public ServerController(IDataService dataService)
+    public ServerController(IDataService dataService, IHttpService httpService)
     {
         _dataService = dataService;
+        _httpService = httpService;
     }
 
     [HttpGet("/get/{id}")]
-    public async Task<KeyValuePair<int, Data>> GetById([FromRoute] int id)
+    public async Task<KeyValuePair<int, Data>?> GetById([FromRoute] int id)
     {
-        return await Task.FromResult(_dataService.GetById(id));
+        return await _dataService.GetById(id);
     }
-    
+
     [HttpGet("/all")]
-    public async Task<IDictionary<int, Data>> GetAll()
+    public async Task<IDictionary<int, Data>?> GetAll()
     {
-        return await Task.FromResult(_dataService.GetAll());
+        return await _dataService.GetAll();
     }
-    
+
     [HttpPut("/update/{id}")]
-    public async Task<Data> Update([FromRoute] int id, [FromForm] Data data)
+    public async Task<Data> Update([FromRoute] int id, [FromBody] Data data)
     {
         return await _dataService.Update(id, data);
     }
 
+    //convert to  dto object
+    //map object
+    //add memorystream to dto and save dto not Data
     [HttpPost]
-    public async Task Save([FromForm] Data data)
+    public async Task<ResultSummary> Save([FromBody] Data data)
     {
-        await _dataService.Save(data);
+        var result = await _dataService.Save(data);
         
-        TcpClient client = new TcpClient(Settings.ServerIP, Settings.Port);
-
-        int byteCount = Encoding.ASCII.GetByteCount("George");
-        byte[] sendData = new byte[byteCount];
-
-        NetworkStream stream = client.GetStream();
-        stream.Write(sendData, 0, sendData.Length);
-        stream.Close();
-        client.Close();
+        result.UpdateServerStatus();
+        return result;
     }
+  
 
     [HttpDelete("/delete/{id}")]
-    public async Task Delete([FromRoute] int id)
+    public async Task<ResultSummary> Delete([FromRoute] int id)
     {
-        await _dataService.Delete(id);
+        var result = await _dataService.Delete(id);
+        result.UpdateServerStatus();
+        return result;
     }
 }

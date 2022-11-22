@@ -1,12 +1,12 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using Server1.Configurations;
-using Server1.Models;
-using Server1.Services.DataService;
-using Server1.Services.Http;
+using Server2.Configurations;
+using Server2.Models;
+using Server2.Services.DataService;
+using Server2.Services.Http;
 
-namespace Server1.Services.DistributionService;
+namespace Server2.Services.DistributionService;
 
 public class DistributionService : IDistributionService
 {

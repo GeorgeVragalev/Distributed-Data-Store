@@ -1,6 +1,6 @@
-﻿using Server1.Models;
+﻿using Server2.Models;
 
-namespace Server1.Repositories.SharedStorage;
+namespace Server2.Repositories.SharedStorage;
 
 public class StorageRepository <T> : IStorageRepository<T> where T : Entity
 {

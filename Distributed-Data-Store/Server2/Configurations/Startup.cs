@@ -1,6 +1,11 @@
-﻿using Server2.Services;
+﻿using Server2.Repositories.DataStorage;
+using Server2.Repositories.SharedStorage;
+using Server2.Services.DataService;
+using Server2.Services.DistributionService;
+using Server2.Services.Http;
+using Server2.Services.SyncService;
 
-namespace Server2.Settings;
+namespace Server2.Configurations;
 public class Startup
 {
     private IConfiguration ConfigRoot { get; }
@@ -14,6 +19,11 @@ public class Startup
         services.AddLogging(config => config.ClearProviders());
         
         services.AddSingleton<ISyncService, SyncService>();
+        services.AddSingleton<IDataService, DataService>();
+        services.AddSingleton<IDataStorage, DataStorage>();
+        services.AddSingleton<IDistributionService, DistributionService>();
+        services.AddSingleton<IHttpService, HttpService>();
+        services.AddSingleton(typeof(IStorageRepository<>), typeof(StorageRepository<>));
         services.AddHostedService<BackgroundTask.BackgroundTask>();
     }
 

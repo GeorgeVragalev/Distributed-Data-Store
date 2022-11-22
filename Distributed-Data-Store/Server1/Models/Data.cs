@@ -1,6 +1,8 @@
 ﻿namespace Server1.Models;
 
 public class Data : Entity
-{
-    public IFormFile File { get; set; }
+{ 
+    public string StreamData { get; set; }
+    public string ContentType { get; set; }
+    public string FileName { get; set; }
 }

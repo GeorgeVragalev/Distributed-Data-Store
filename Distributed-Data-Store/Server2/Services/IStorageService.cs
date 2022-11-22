@@ -1,6 +1,6 @@
-﻿using Server1.Models;
+﻿using Server2.Models;
 
-namespace Server1.Services;
+namespace Server2.Services;
 
 public interface IStorageService <T> where T : Entity
 {

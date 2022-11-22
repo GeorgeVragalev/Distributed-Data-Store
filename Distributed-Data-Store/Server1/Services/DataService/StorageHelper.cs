@@ -1,7 +1,7 @@
-﻿using PartitionLeader.Configurations;
-using PartitionLeader.Models;
+﻿using Server1.Configurations;
+using Server1.Models;
 
-namespace PartitionLeader.Services.DataService;
+namespace Server1.Services.DataService;
 
 public static class StorageHelper
 {

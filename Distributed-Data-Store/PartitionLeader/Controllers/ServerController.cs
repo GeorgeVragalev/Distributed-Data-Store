@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System.Net.Http.Headers;
+using System.Net.Sockets;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using PartitionLeader.Configurations;
@@ -27,26 +28,44 @@ public class ServerController : ControllerBase
     {
         return await _dataService.GetById(id);
     }
-    
+
     [HttpGet("/all")]
     public async Task<IDictionary<int, Data>?> GetAll()
     {
         return await _dataService.GetAll();
     }
-    
+
     [HttpPut("/update/{id}")]
-    public async Task<Data> Update([FromRoute] int id, [FromForm] Data data)
+    public async Task<Data> Update([FromRoute] int id, [FromForm] DataModel dataModel)
     {
+        var data = dataModel.Map();
         return await _dataService.Update(id, data);
     }
 
+    //convert to  dto object
+    //map object
+    //add memorystream to dto and save dto not Data
     [HttpPost]
-    public async Task<ResultSummary> Save([FromForm] Data data)
+    public async Task<ResultSummary> Save([FromForm] DataModel dataModel)
     {
-        var url = StorageHelper.GetOptimalServerUrl();
+        var data = dataModel.Map();
+        var result = await _dataService.Save(data);
+        
+        var server1Result = await _httpService.Save(data, Settings.Server1);
 
-        var result =  await _dataService.Save(data);
-        var a = _httpService.GetById(1, Settings.ThisServerUrl);
+        server1Result.UpdateServerStatus();
+        result.UpdateServerStatus();
+        return result;
+    }
+    
+    //add memorystream to dto and save dto not Data
+    [HttpPost("/save")]
+    public async Task<ResultSummary> Save2([FromBody] Data data)
+    {
+        var result = await _dataService.Save(data);
+        
+        var server1Result = _httpService.Save(data, Settings.ThisServerUrl);
+
         result.UpdateServerStatus();
         return result;
     }
@@ -54,7 +73,7 @@ public class ServerController : ControllerBase
     [HttpDelete("/delete/{id}")]
     public async Task<ResultSummary> Delete([FromRoute] int id)
     {
-        var result =  await _dataService.Delete(id);
+        var result = await _dataService.Delete(id);
         result.UpdateServerStatus();
         return result;
     }

@@ -1,6 +1,6 @@
-﻿using Server1.Models;
+﻿using Server2.Models;
 
-namespace Server1.Services.DistributionService;
+namespace Server2.Services.DistributionService;
 
 public interface IDistributionService
 {

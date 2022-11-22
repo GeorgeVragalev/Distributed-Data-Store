@@ -1,8 +1,8 @@
-﻿using Server1.Helpers;
-using Server1.Models;
-using Server1.Repositories.DataStorage;
+﻿using Server2.Helpers;
+using Server2.Models;
+using Server2.Repositories.DataStorage;
 
-namespace Server1.Services.DataService;
+namespace Server2.Services.DataService;
 
 public class DataService : IDataService
 {

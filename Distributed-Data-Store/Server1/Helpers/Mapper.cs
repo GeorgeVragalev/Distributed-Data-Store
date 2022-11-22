@@ -1,6 +1,6 @@
-﻿using PartitionLeader.Models;
+﻿using Server1.Models;
 
-namespace PartitionLeader.Helpers;
+namespace Server1.Helpers;
 
 public static class Mapper
 {
