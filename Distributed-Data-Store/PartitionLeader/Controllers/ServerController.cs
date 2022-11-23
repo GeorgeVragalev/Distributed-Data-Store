@@ -34,6 +34,12 @@ public class ServerController : ControllerBase
     {
         return await _dataService.GetAll();
     }
+    
+    [HttpGet("/summary")]
+    public async Task<IDictionary<int, Data>?> GetSummary()
+    {
+        return await _dataService.GetAll();
+    }
 
     [HttpPut("/update/{id}")]
     public async Task<Data> Update([FromRoute] int id, [FromForm] DataModel dataModel)
@@ -42,9 +48,6 @@ public class ServerController : ControllerBase
         return await _dataService.Update(id, data);
     }
 
-    //convert to  dto object
-    //map object
-    //add memorystream to dto and save dto not Data
     [HttpPost]
     public async Task<ResultSummary> Save([FromForm] DataModel dataModel)
     {
@@ -54,18 +57,6 @@ public class ServerController : ControllerBase
         var server1Result = await _httpService.Save(data, Settings.Server1);
 
         server1Result.UpdateServerStatus();
-        result.UpdateServerStatus();
-        return result;
-    }
-    
-    //add memorystream to dto and save dto not Data
-    [HttpPost("/save")]
-    public async Task<ResultSummary> Save2([FromBody] Data data)
-    {
-        var result = await _dataService.Save(data);
-        
-        var server1Result = _httpService.Save(data, Settings.ThisServerUrl);
-
         result.UpdateServerStatus();
         return result;
     }

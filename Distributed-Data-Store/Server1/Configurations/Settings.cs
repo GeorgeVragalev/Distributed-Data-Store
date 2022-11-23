@@ -7,16 +7,16 @@ public static class Settings
     public static readonly ServerName ServerName = ServerName.PartitionLeader;
     
     public static readonly bool Leader = true;
-    public static readonly string ServerIP = "localhost";
     // public static readonly string ServerIP = "localhost";
-    public static readonly int Port = 7112;
-    public static readonly string BaseUrl = $"https://localhost:"; //local
+    public static readonly string ServerIP = "host.docker.internal";  
+    public static readonly int Port = 7173;
+    public static readonly string BaseUrl = $"https://{ServerIP}:"; //local
 
-    public static readonly string ThisServerUrl = $"https://localhost:{7112}"; //docker
+    public static readonly string ThisServerUrl = $"https://{ServerIP}:{Port}"; //docker
 
-    public static readonly string PartitionLeader = $"https://localhost:{7112}"; //local
-    public static readonly string Server1 = $"https://localhost:{7173}"; //local
-    public static readonly string Server2 = $"https://localhost:{7156}"; //local
+    public static readonly string PartitionLeader = $"https://{ServerIP}:{7112}"; //local
+    public static readonly string Server1 = $"https://{ServerIP}:{7173}"; //local
+    public static readonly string Server2 = $"https://{ServerIP}:{7156}"; //local
 }
 /*
 to run docker for dininghall container: 

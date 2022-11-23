@@ -54,4 +54,9 @@ public static class StorageHelper
                 break;
         }
     }
+
+    public static ResultSummary? GetStatus()
+    {
+        return PartitionLeaderStatus;
+    }
 }
