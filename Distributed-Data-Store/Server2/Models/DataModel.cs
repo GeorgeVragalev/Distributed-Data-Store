@@ -2,5 +2,5 @@
 
 public class DataModel : Entity
 {
-    public FormFile File { get; set; }
+    public IFormFile File { get; set; }
 }

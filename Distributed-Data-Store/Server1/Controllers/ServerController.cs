@@ -32,15 +32,18 @@ public class ServerController : ControllerBase
         return await _dataService.GetAll();
     }
 
+    [HttpGet("/summary")]
+    public async Task<ResultSummary?> GetSummary()
+    {
+        return await Task.FromResult(StorageHelper.GetStatus());
+    }
+    
     [HttpPut("/update/{id}")]
     public async Task<Data> Update([FromRoute] int id, [FromBody] Data data)
     {
         return await _dataService.Update(id, data);
     }
-
-    //convert to  dto object
-    //map object
-    //add memorystream to dto and save dto not Data
+    
     [HttpPost]
     public async Task<ResultSummary> Save([FromBody] Data data)
     {

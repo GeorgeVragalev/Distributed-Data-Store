@@ -36,9 +36,9 @@ public class ServerController : ControllerBase
     }
     
     [HttpGet("/summary")]
-    public async Task<IDictionary<int, Data>?> GetSummary()
+    public async Task<ResultSummary?> GetSummary()
     {
-        return await _dataService.GetAll();
+        return await Task.FromResult(StorageHelper.GetStatus());
     }
 
     [HttpPut("/update/{id}")]

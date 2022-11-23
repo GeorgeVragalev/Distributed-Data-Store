@@ -1,7 +1,7 @@
-﻿using Server1.Configurations;
-using Server1.Models;
+﻿using Server2.Configurations;
+using Server2.Models;
 
-namespace Server1.Services.DataService;
+namespace Server2.Helpers;
 
 public static class StorageHelper
 {
@@ -53,5 +53,10 @@ public static class StorageHelper
             default:
                 break;
         }
+    }
+    
+    public static ResultSummary? GetStatus()
+    {
+        return Server_2_Status;
     }
 }

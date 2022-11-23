@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Server2.Helpers;
 using Server2.Models;
 using Server2.Services.DataService;
 using Server2.Services.Http;
@@ -23,32 +24,39 @@ public class ServerController : ControllerBase
     {
         return await _dataService.GetById(id);
     }
-    
+
     [HttpGet("/all")]
     public async Task<IDictionary<int, Data>?> GetAll()
     {
         return await _dataService.GetAll();
     }
+
+    [HttpGet("/summary")]
+    public async Task<ResultSummary?> GetSummary()
+    {
+        return await Task.FromResult(StorageHelper.GetStatus());
+    }
     
     [HttpPut("/update/{id}")]
-    public async Task<Data> Update([FromRoute] int id, [FromForm] Data data)
+    public async Task<Data> Update([FromRoute] int id, [FromBody] Data data)
     {
         return await _dataService.Update(id, data);
     }
-
+    
     [HttpPost]
-    public async Task<ResultSummary> Save([FromForm] Data data)
+    public async Task<ResultSummary> Save([FromBody] Data data)
     {
-        var result =  await _dataService.Save(data);
+        var result = await _dataService.Save(data);
         
         result.UpdateServerStatus();
         return result;
     }
+  
 
     [HttpDelete("/delete/{id}")]
     public async Task<ResultSummary> Delete([FromRoute] int id)
     {
-        var result =  await _dataService.Delete(id);
+        var result = await _dataService.Delete(id);
         result.UpdateServerStatus();
         return result;
     }

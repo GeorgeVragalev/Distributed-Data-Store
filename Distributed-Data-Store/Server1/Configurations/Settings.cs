@@ -4,7 +4,7 @@ namespace Server1.Configurations;
 
 public static class Settings
 {
-    public static readonly ServerName ServerName = ServerName.PartitionLeader;
+    public static readonly ServerName ServerName = ServerName.Server1;
     
     public static readonly bool Leader = true;
     

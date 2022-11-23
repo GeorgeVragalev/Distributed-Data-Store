@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 using Server2.Configurations;
+using Server2.Helpers;
 using Server2.Models;
 using Server2.Services.DataService;
 using Server2.Services.Http;
@@ -61,7 +62,7 @@ public class DistributionService : IDistributionService
     
     public void Client()
     {
-        TcpClient client = new TcpClient(Settings.ServerIP, Settings.Port);
+        TcpClient client = new TcpClient(Settings.ServerIP, Settings.ThisPort);
 
         int byteCount = Encoding.ASCII.GetByteCount("George");
         byte[] sendData = new byte[byteCount];
@@ -75,7 +76,7 @@ public class DistributionService : IDistributionService
     public void Listener()
     {
         IPAddress ip = Dns.GetHostEntry("localhost").AddressList[0];
-        TcpListener server = new TcpListener(ip, Settings.Port);
+        TcpListener server = new TcpListener(ip, Settings.ThisPort);
         TcpClient client = default(TcpClient);
         try
         {

@@ -1,7 +1,7 @@
-﻿using PartitionLeader.Configurations;
-using PartitionLeader.Models;
+﻿using Server1.Configurations;
+using Server1.Models;
 
-namespace PartitionLeader.Services.DataService;
+namespace Server1.Helpers;
 
 public static class StorageHelper
 {
@@ -54,9 +54,9 @@ public static class StorageHelper
                 break;
         }
     }
-
+    
     public static ResultSummary? GetStatus()
     {
-        return PartitionLeaderStatus;
+        return Server_1_Status;
     }
 }

@@ -1,14 +1,14 @@
-﻿using Server2.Configurations;
-using Server2.Models;
+﻿using PartitionLeader.Configurations;
+using PartitionLeader.Models;
 
-namespace Server2.Services.DataService;
+namespace PartitionLeader.Helpers;
 
 public static class StorageHelper
 {
     public static ResultSummary? PartitionLeaderStatus = new ResultSummary(){
         StorageCount = 0,
         LastProcessedId = 0,
-        Port = Settings.Port,
+        Port = Settings.ThisPort,
         ServerName = Settings.ServerName
     };
     public static ResultSummary? Server_1_Status = new ResultSummary(){
@@ -53,5 +53,10 @@ public static class StorageHelper
             default:
                 break;
         }
+    }
+
+    public static ResultSummary? GetStatus()
+    {
+        return PartitionLeaderStatus;
     }
 }
