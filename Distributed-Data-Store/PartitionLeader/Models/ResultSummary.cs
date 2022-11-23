@@ -14,7 +14,7 @@ public class ResultSummary
 
     public ResultSummary()
     {
-        Port = Settings.Port;
+        Port = Settings.ThisPort;
         ServerName = Settings.ServerName;
     }
 }

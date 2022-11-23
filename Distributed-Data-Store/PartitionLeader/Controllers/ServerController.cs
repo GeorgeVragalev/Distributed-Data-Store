@@ -53,10 +53,19 @@ public class ServerController : ControllerBase
     {
         var data = dataModel.Map();
         var result = await _dataService.Save(data);
-        
-        var server1Result = await _httpService.Save(data, Settings.Server1);
+        try
+        {
+            var server1Result = await _httpService.Save(data, Settings.Server1);
+            var server2Result = await _httpService.Save(data, Settings.Server2);
+            
+            server1Result.UpdateServerStatus();
+            server2Result.UpdateServerStatus();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
 
-        server1Result.UpdateServerStatus();
         result.UpdateServerStatus();
         return result;
     }

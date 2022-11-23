@@ -8,7 +8,7 @@ public static class StorageHelper
     public static ResultSummary? PartitionLeaderStatus = new ResultSummary(){
         StorageCount = 0,
         LastProcessedId = 0,
-        Port = Settings.Port,
+        Port = Settings.ThisPort,
         ServerName = Settings.ServerName
     };
     public static ResultSummary? Server_1_Status = new ResultSummary(){
