@@ -45,7 +45,19 @@ public class ServerController : ControllerBase
     public async Task<Data> Update([FromRoute] int id, [FromForm] DataModel dataModel)
     {
         var data = dataModel.Map();
-        return await _dataService.Update(id, data);
+        var updatedData = await _dataService.Update(id, data);
+        
+        try
+        {
+            await _httpService.Update(id, data, Settings.Server1);
+            await _httpService.Update(id, data, Settings.Server2);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
+        return updatedData;
     }
 
     [HttpPost]
@@ -53,6 +65,8 @@ public class ServerController : ControllerBase
     {
         var data = dataModel.Map();
         var result = await _dataService.Save(data);
+        result.UpdateServerStatus();
+        
         try
         {
             var server1Result = await _httpService.Save(data, Settings.Server1);
@@ -66,7 +80,6 @@ public class ServerController : ControllerBase
             Console.WriteLine(e);
         }
 
-        result.UpdateServerStatus();
         return result;
     }
 
@@ -75,6 +88,19 @@ public class ServerController : ControllerBase
     {
         var result = await _dataService.Delete(id);
         result.UpdateServerStatus();
+        
+        try
+        {
+            var server1Result = await _httpService.Delete(id, Settings.Server1);
+            var server2Result = await _httpService.Delete(id, Settings.Server2);
+            
+            server1Result.UpdateServerStatus();
+            server2Result.UpdateServerStatus();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
         return result;
     }
 }

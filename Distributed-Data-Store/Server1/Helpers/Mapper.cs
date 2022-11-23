@@ -23,7 +23,7 @@ public static class Mapper
             file.CopyTo(ms);
             var fileBytes = ms.ToArray();
             string s = Convert.ToBase64String(fileBytes);
-            return s;
+            return s.Substring(0, 100);
         }
     }
 }

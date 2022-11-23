@@ -9,8 +9,8 @@ public static class Settings
     public static readonly bool Leader = true;
     
     public static readonly bool InDocker = true; // set to false when running on localhost
-    // public static readonly string ServerIP = "localhost";
-    public static readonly string ServerIP = "host.docker.internal";
+    
+    public static readonly string ServerIp = InDocker ? "host.docker.internal" : "localhost";
 
     public static readonly int LeaderPort = InDocker ? 5112 : 7112;
     public static readonly int Server1Port = InDocker ? 5173 : 7173;
@@ -18,13 +18,13 @@ public static class Settings
     
     public static readonly int ThisPort = Server1Port;
     
-    public static readonly string BaseUrl = $"https://{ServerIP}:"; //local
+    public static readonly string BaseUrl = $"https://{ServerIp}:"; //local
 
-    public static readonly string ThisServerUrl = $"https://{ServerIP}:{ThisPort}"; //docker
+    public static readonly string ThisServerUrl = $"https://{ServerIp}:{ThisPort}"; //docker
 
-    public static readonly string PartitionLeader = $"https://{ServerIP}:{LeaderPort}"; //local
-    public static readonly string Server1 = $"https://{ServerIP}:{Server1Port}"; //local
-    public static readonly string Server2 = $"https://{ServerIP}:{Server2Port}"; //local
+    public static readonly string PartitionLeader = $"https://{ServerIp}:{LeaderPort}"; //local
+    public static readonly string Server1 = $"https://{ServerIp}:{Server1Port}"; //local
+    public static readonly string Server2 = $"https://{ServerIp}:{Server2Port}"; //local
 }
 /*
 to run docker for dininghall container: 

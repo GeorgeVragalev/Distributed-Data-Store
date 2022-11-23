@@ -62,7 +62,7 @@ public class DistributionService : IDistributionService
     
     public void Client()
     {
-        TcpClient client = new TcpClient(Settings.ServerIP, Settings.ThisPort);
+        TcpClient client = new TcpClient(Settings.ServerIp, Settings.ThisPort);
 
         int byteCount = Encoding.ASCII.GetByteCount("George");
         byte[] sendData = new byte[byteCount];

@@ -18,12 +18,12 @@ public class HttpService : IHttpService
             var dataAsJson = await response.Content.ReadAsStringAsync();
             var deserialized = JsonConvert.DeserializeObject<KeyValuePair<int, Data>>(dataAsJson);
             
-            PrintConsole.Write($"Got data from url with id: {id}", ConsoleColor.Green);
+            PrintConsole.Write($"Got data from url {url} with id: {id}", ConsoleColor.Green);
             return deserialized;
         }
         catch (Exception e)
         {
-            PrintConsole.Write($"Failed get by id: {id}", ConsoleColor.DarkRed);
+            PrintConsole.Write($"Failed to get by id: {id}", ConsoleColor.DarkRed);
         }
 
         return null;
@@ -52,7 +52,7 @@ public class HttpService : IHttpService
         return null;
     }
 
-    public async Task<Data> Update(int id, Data data, string url)
+    public async Task<Data?> Update(int id, Data data, string url)
     {
         try
         {
@@ -62,8 +62,12 @@ public class HttpService : IHttpService
             using var client = new HttpClient();
 
             var response = await client.PutAsync($"{url}/update/{id}" , content);
+            
+            var dataAsJson = await response.Content.ReadAsStringAsync();
+            var deserialized = JsonConvert.DeserializeObject<Data>(dataAsJson);
+            
             PrintConsole.Write($"Updated data from url {url}, id: {id}", ConsoleColor.Green);
-            return null;
+            return deserialized;
         }
         catch (Exception e)
         {
@@ -99,8 +103,27 @@ public class HttpService : IHttpService
         return null;
     }
 
-    public Task<ResultSummary> Delete(int id, string url)
+    public async Task<ResultSummary?> Delete(int id, string url)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using var client = new HttpClient();
+
+            var response = await client.DeleteAsync($"{url}/delete/{id}");
+            
+            var dataAsJson = await response.Content.ReadAsStringAsync();
+            var deserialized = JsonConvert.DeserializeObject<ResultSummary>(dataAsJson);
+            
+            PrintConsole.Write($"Deleted data from url {url} with id: {id}", ConsoleColor.Green);
+
+            return deserialized;
+        }
+        catch (Exception e)
+        {
+            PrintConsole.Write($"Failed to delete from {url} id: {id}", ConsoleColor.DarkRed);
+        }
+
+        return null;
+        
     }
 }
