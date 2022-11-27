@@ -4,6 +4,7 @@ using PartitionLeader.Services.DataService;
 using PartitionLeader.Services.DistributionService;
 using PartitionLeader.Services.Http;
 using PartitionLeader.Services.SyncService;
+using PartitionLeader.Services.Tcp;
 
 namespace PartitionLeader.Configurations;
 public class Startup
@@ -23,6 +24,7 @@ public class Startup
         services.AddSingleton<IDataStorage, DataStorage>();
         services.AddSingleton<IDistributionService, DistributionService>();
         services.AddSingleton<IHttpService, HttpService>();
+        services.AddSingleton<ITcpService, TcpService>();
         services.AddSingleton(typeof(IStorageRepository<>), typeof(StorageRepository<>));
         services.AddHostedService<BackgroundTask.BackgroundTask>();
     }

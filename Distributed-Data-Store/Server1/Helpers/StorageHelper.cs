@@ -42,19 +42,7 @@ public static class StorageHelper
     public static void UpdateServerStatus(this ResultSummary? summary)
     {
         if (summary != null)
-            switch (summary.ServerName)
-            {
-                case ServerName.PartitionLeader:
-                    _partitionLeaderStatus = summary;
-                    break;
-                case ServerName.Server1:
-                    _server1Status = summary;
-                    break;
-                case ServerName.Server2:
-                default:
-                    _server2Status = summary;
-                    break;
-            }
+            _server1Status = summary;
     }
 
     public static ResultSummary? GetStatus()

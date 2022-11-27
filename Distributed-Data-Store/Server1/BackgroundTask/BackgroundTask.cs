@@ -1,4 +1,5 @@
 ﻿using Server1.Services.SyncService;
+using Server1.Services.Tcp;
 
 namespace Server1.BackgroundTask;
 
@@ -23,8 +24,8 @@ public class BackgroundTask : BackgroundService
         await Task.Delay(5000);
         using (var scope = _serviceScopeFactory.CreateScope())
         {
-            var scoped = scope.ServiceProvider.GetRequiredService<ISyncService>();
-            await scoped.SyncData(stoppingToken);
+            var scoped = scope.ServiceProvider.GetRequiredService<ITcpService>();
+            scoped.Run();
         }
     }
 }

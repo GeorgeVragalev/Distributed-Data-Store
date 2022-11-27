@@ -19,6 +19,7 @@ public class StorageRepository <T> : IStorageRepository<T> where T : Entity
 
     public Task<ResultSummary> Save(int id, T entity)
     {
+        entity.Id = id;
         _storage.Add(id, entity);
         return Task.FromResult(new ResultSummary()
         {

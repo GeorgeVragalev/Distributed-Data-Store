@@ -7,6 +7,7 @@ using PartitionLeader.Helpers;
 using PartitionLeader.Models;
 using PartitionLeader.Services.DataService;
 using PartitionLeader.Services.Http;
+using PartitionLeader.Services.Tcp;
 
 namespace PartitionLeader.Controllers;
 
@@ -16,11 +17,13 @@ public class ServerController : ControllerBase
 {
     private readonly IDataService _dataService;
     private readonly IHttpService _httpService;
+    private readonly ITcpService _tcpService;
 
-    public ServerController(IDataService dataService, IHttpService httpService)
+    public ServerController(IDataService dataService, IHttpService httpService, ITcpService tcpService)
     {
         _dataService = dataService;
         _httpService = httpService;
+        _tcpService = tcpService;
     }
 
     [HttpGet("/get/{id}")]
@@ -42,65 +45,130 @@ public class ServerController : ControllerBase
     }
 
     [HttpPut("/update/{id}")]
-    public async Task<Data> Update([FromRoute] int id, [FromForm] DataModel dataModel)
+    public async Task<List<Data>> Update([FromRoute] int id, [FromForm] DataModel dataModel)
     {
         var data = dataModel.Map();
         var updatedData = await _dataService.Update(id, data);
+        var list = new List<Data>();
+        
+        list.Add(updatedData);
         
         try
         {
-            await _httpService.Update(id, data, Settings.Server1);
-            await _httpService.Update(id, data, Settings.Server2);
+            var server1Result = await _httpService.Update(id, data, Settings.Server1);
+            Console.WriteLine(server1Result);
+            if (server1Result != null )
+            {
+                list.Add(server1Result);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        
+        try
+        {
+            var server2Result = await _httpService.Update(id, data, Settings.Server2);
+            Console.WriteLine(server2Result);
+            if (server2Result != null )
+            {
+                list.Add(server2Result);
+            }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
         }
 
-        return updatedData;
+        return list;
     }
 
     [HttpPost]
-    public async Task<ResultSummary> Save([FromForm] DataModel dataModel)
+    public async Task<IList<ResultSummary>> Save([FromForm] DataModel dataModel)
     {
+        var list = new List<ResultSummary>();
         var data = dataModel.Map();
         var result = await _dataService.Save(data);
         result.UpdateServerStatus();
+        list.Add(result);
         
+        var response = _tcpService.TcpSave(data);
+
         try
         {
             var server1Result = await _httpService.Save(data, Settings.Server1);
-            var server2Result = await _httpService.Save(data, Settings.Server2);
-            
+            Console.WriteLine(server1Result);
             server1Result.UpdateServerStatus();
+            if (server1Result != null )
+            {
+                list.Add(server1Result);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        
+        try
+        {
+            var server2Result = await _httpService.Save(data, Settings.Server2);
+            Console.WriteLine(server2Result);
             server2Result.UpdateServerStatus();
+            if (server2Result != null )
+            {
+                list.Add(server2Result);
+            }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
         }
 
-        return result;
+        return list;
     }
 
     [HttpDelete("/delete/{id}")]
-    public async Task<ResultSummary> Delete([FromRoute] int id)
+    public async Task<List<ResultSummary>> Delete([FromRoute] int id)
     {
+        
+        var list = new List<ResultSummary>();
         var result = await _dataService.Delete(id);
         result.UpdateServerStatus();
+
+        list.Add(result);
+        
         
         try
         {
             var server1Result = await _httpService.Delete(id, Settings.Server1);
-            var server2Result = await _httpService.Delete(id, Settings.Server2);
-            
+            Console.WriteLine(server1Result);
             server1Result.UpdateServerStatus();
-            server2Result.UpdateServerStatus();
+            if (server1Result != null )
+            {
+                list.Add(server1Result);
+            }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
         }
-        return result;
+        
+        try
+        {
+            var server2Result = await _httpService.Delete(id, Settings.Server2);
+            Console.WriteLine(server2Result);
+            server2Result.UpdateServerStatus();
+            if (server2Result != null )
+            {
+                list.Add(server2Result);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        
+        return list;
     }
 }

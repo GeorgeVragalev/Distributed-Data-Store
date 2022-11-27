@@ -58,8 +58,6 @@ public class DistributionService : IDistributionService
         return result;
     }
 
-    
-    
     public void Client()
     {
         TcpClient client = new TcpClient(Settings.ServerIp, Settings.ThisPort);

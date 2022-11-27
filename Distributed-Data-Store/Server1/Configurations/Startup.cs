@@ -4,6 +4,7 @@ using Server1.Services.DataService;
 using Server1.Services.DistributionService;
 using Server1.Services.Http;
 using Server1.Services.SyncService;
+using Server1.Services.Tcp;
 
 namespace Server1.Configurations;
 public class Startup
@@ -23,6 +24,7 @@ public class Startup
         services.AddSingleton<IDataStorage, DataStorage>();
         services.AddSingleton<IDistributionService, DistributionService>();
         services.AddSingleton<IHttpService, HttpService>();
+        services.AddSingleton<ITcpService, TcpService>();
         services.AddSingleton(typeof(IStorageRepository<>), typeof(StorageRepository<>));
         services.AddHostedService<BackgroundTask.BackgroundTask>();
     }
