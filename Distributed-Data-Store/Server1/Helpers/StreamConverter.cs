@@ -1,15 +1,15 @@
 ﻿using System.Text;
 
-namespace PartitionLeader.Helpers;
+namespace Server1.Helpers;
 
 public static class StreamConverter{
 
-    private static readonly Encoding Encoding = Encoding.UTF8;
+    static Encoding encoding = Encoding.UTF8;
 
     public static byte[] MessageToByteArray(string message)
     {
         // get the size of original message
-        var messageBytes = Encoding.GetBytes(message);
+        var messageBytes = encoding.GetBytes(message);
         var messageSize = messageBytes.Length;
         
         // add content length bytes to the original size
@@ -41,16 +41,11 @@ public static class StreamConverter{
         stream.Read(messageBytes, 0, messageSize);
         
         // convert message byte array to the message string using the encoding
-        var message = Encoding.GetString(messageBytes);
+        var message = encoding.GetString(messageBytes);
         string result = null;
         foreach (var c in message)
-        {
             if (c != '\0')
-            {
                 result += c;
-            }
-        }
-           
  
         return result;
     }

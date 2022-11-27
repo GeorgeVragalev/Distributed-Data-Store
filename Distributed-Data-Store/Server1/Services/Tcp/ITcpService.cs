@@ -1,6 +1,8 @@
-﻿namespace Server1.Services.Tcp;
+﻿using Server1.Models;
+
+namespace Server1.Services.Tcp;
 
 public interface ITcpService
 {
-    public void Run();
+    public Task Run();
 }

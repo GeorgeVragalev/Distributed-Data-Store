@@ -38,6 +38,29 @@ public static class StorageHelper
 
         return $"{Settings.BaseUrl}{optimalServer.Port}";
     }
+    
+    
+    public static List<ServerName> GetOptimalServers()
+    {
+        var servers = new List<ServerName>();
+
+        var optimalServer1 = _partitionLeaderStatus;
+        var optimalServer2 = _server1Status;
+
+        if (_server2Status.StorageCount < optimalServer1.StorageCount)
+        {
+            optimalServer1 = _server2Status;
+        }
+        else if (_server2Status.StorageCount < optimalServer2.StorageCount)
+        {
+            optimalServer2 = _server2Status;
+        }
+        
+        servers.Add(optimalServer1.ServerName);
+        servers.Add(optimalServer2.ServerName);
+
+        return servers;
+    }
 
     public static void UpdateServerStatus(this ResultSummary? summary)
     {

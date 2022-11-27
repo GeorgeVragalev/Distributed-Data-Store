@@ -22,10 +22,8 @@ public class BackgroundTask : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await Task.Delay(5000);
-        using (var scope = _serviceScopeFactory.CreateScope())
-        {
-            var scoped = scope.ServiceProvider.GetRequiredService<ITcpService>();
-            scoped.Run();
-        }
+        using var scope = _serviceScopeFactory.CreateScope();
+        var scoped = scope.ServiceProvider.GetRequiredService<ITcpService>();
+        await scoped.Run();
     }
 }

@@ -18,6 +18,9 @@ public static class Settings
     
     public static readonly int ThisPort = Server2Port;
     
+    public static readonly int Server1TcpSavePort = 8081;
+    public static readonly int Server2TcpSavePort = 8082;
+    
     public static readonly string BaseUrl = $"https://{ServerIp}:"; //local
 
     public static readonly string ThisServerUrl = $"https://{ServerIp}:{ThisPort}"; //docker
