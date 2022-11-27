@@ -7,20 +7,24 @@ namespace PartitionLeader.Services.Tcp;
 
 public class TcpService : ITcpService
 {
-    public string TcpSave(Data data)
+    public ResultSummary? TcpSave(Data data, int serverPort)
     {
         var requestMessage = JsonConvert.SerializeObject(data);
-        var responseMessage = SendMessage(requestMessage);
+        var responseMessage = SendMessage(requestMessage, serverPort);
+        
+        var deserialized = JsonConvert.DeserializeObject<ResultSummary>(responseMessage);
+
         Console.WriteLine(responseMessage);
-        return responseMessage;
+        
+        return deserialized;
     }
 
-    private string SendMessage(string message)
+    private string SendMessage(string message, int serverPort)
     {
         var response = "";
         try
         {
-            var client = new TcpClient("127.0.0.1", 8081);
+            var client = new TcpClient("127.0.0.1", serverPort);
             client.NoDelay = true;
             var messageBytes = StreamConverter.MessageToByteArray(message);
 

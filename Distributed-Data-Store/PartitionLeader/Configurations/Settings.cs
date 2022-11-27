@@ -16,6 +16,9 @@ public static class Settings
     public static readonly int Server1Port = 7173;
     public static readonly int Server2Port = 7156;
     
+    public static readonly int Server1TcpSavePort = 8081;
+    public static readonly int Server2TcpSavePort = 8082;
+    
     public static readonly int ThisPort = LeaderPort;
     
     public static readonly string BaseUrl = $"https://{ServerIp}:"; //local

@@ -43,11 +43,15 @@ public class StorageRepository <T> : IStorageRepository<T> where T : Entity
 
     public Task<ResultSummary> Delete(int id)
     {
-        _storage.Remove(id); 
+        if (_storage.ContainsKey(id))
+        {
+            _storage.Remove(id);
+        }
+        
         return Task.FromResult(new ResultSummary()
         {
             StorageCount = _storage.Count,
             LastProcessedId = id
-        });;
+        });
     }
 }
