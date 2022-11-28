@@ -99,8 +99,26 @@ public class HttpService : IHttpService
         return null;
     }
 
-    public Task<ResultSummary> Delete(int id, string url)
+    public async Task<ResultSummary?> Delete(int id, string url)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using var client = new HttpClient();
+
+            var response = await client.DeleteAsync($"{url}/delete/{id}");
+            
+            var dataAsJson = await response.Content.ReadAsStringAsync();
+            var deserialized = JsonConvert.DeserializeObject<ResultSummary>(dataAsJson);
+            
+            PrintConsole.Write($"Deleted data from url {url} with id: {id}", ConsoleColor.Green);
+
+            return deserialized;
+        }
+        catch (Exception e)
+        {
+            PrintConsole.Write($"Failed to delete from {url} id: {id}", ConsoleColor.DarkRed);
+        }
+
+        return null;
     }
 }

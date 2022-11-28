@@ -64,11 +64,24 @@ public static class StorageHelper
     public static void UpdateServerStatus(this ResultSummary? summary)
     {
         if (summary != null)
-            _server1Status = summary;
+        {
+            switch (summary.ServerName)
+            {
+                case ServerName.PartitionLeader:
+                    _partitionLeaderStatus = summary;
+                    break;
+                case ServerName.Server1:
+                    _server1Status = summary;
+                    break;
+                case ServerName.Server2:
+                    _server2Status = summary;
+                    break;
+            }
+        }
     }
 
     public static ResultSummary? GetStatus()
     {
-        return _partitionLeaderStatus;
+        return _server1Status;
     }
 }

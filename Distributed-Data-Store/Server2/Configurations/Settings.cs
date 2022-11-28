@@ -4,9 +4,9 @@ namespace Server2.Configurations;
 
 public static class Settings
 {
-    public static readonly ServerName ServerName = ServerName.PartitionLeader;
+    public static readonly ServerName ServerName = ServerName.Server2;
     
-    public static readonly bool Leader = false;
+    public static bool Leader = false;
     
     public static readonly bool InDocker = false; // set to false when running on localhost
     

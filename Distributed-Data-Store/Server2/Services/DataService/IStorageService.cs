@@ -1,6 +1,6 @@
 ﻿using Server2.Models;
 
-namespace Server2.Services;
+namespace Server2.Services.DataService;
 
 public interface IStorageService <T> where T : Entity
 {

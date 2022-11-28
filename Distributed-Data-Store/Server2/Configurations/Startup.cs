@@ -2,8 +2,10 @@
 using Server2.Repositories.SharedStorage;
 using Server2.Services.DataService;
 using Server2.Services.DistributionService;
+using Server2.Services.HealthCheck;
 using Server2.Services.Http;
 using Server2.Services.SyncService;
+using Server2.Services.Tcp;
 
 namespace Server2.Configurations;
 public class Startup
@@ -21,8 +23,10 @@ public class Startup
         services.AddSingleton<ISyncService, SyncService>();
         services.AddSingleton<IDataService, DataService>();
         services.AddSingleton<IDataStorage, DataStorage>();
+        services.AddSingleton<IHealthCheckService, HealthCheckService>();
         services.AddSingleton<IDistributionService, DistributionService>();
         services.AddSingleton<IHttpService, HttpService>();
+        services.AddSingleton<ITcpService, TcpService>();
         services.AddSingleton(typeof(IStorageRepository<>), typeof(StorageRepository<>));
         services.AddHostedService<BackgroundTask.BackgroundTask>();
     }

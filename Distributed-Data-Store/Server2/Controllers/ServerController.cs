@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Server2.Configurations;
 using Server2.Helpers;
 using Server2.Models;
-using Server2.Services.DataService;
+using Server2.Services.DistributionService;
 using Server2.Services.Http;
 
 namespace Server2.Controllers;
@@ -10,25 +11,25 @@ namespace Server2.Controllers;
 [Route("")]
 public class ServerController : ControllerBase
 {
-    private readonly IDataService _dataService;
+    private readonly IDistributionService _distributionService;
     private readonly IHttpService _httpService;
 
-    public ServerController(IDataService dataService, IHttpService httpService)
+    public ServerController(IDistributionService distributionService, IHttpService httpService)
     {
-        _dataService = dataService;
+        _distributionService = distributionService;
         _httpService = httpService;
     }
 
     [HttpGet("/get/{id}")]
     public async Task<KeyValuePair<int, Data>?> GetById([FromRoute] int id)
     {
-        return await _dataService.GetById(id);
+        return await _distributionService.GetById(id);
     }
 
     [HttpGet("/all")]
     public async Task<IDictionary<int, Data>?> GetAll()
     {
-        return await _dataService.GetAll();
+        return await _distributionService.GetAll();
     }
 
     [HttpGet("/summary")]
@@ -40,24 +41,29 @@ public class ServerController : ControllerBase
     [HttpPut("/update/{id}")]
     public async Task<Data> Update([FromRoute] int id, [FromBody] Data data)
     {
-        return await _dataService.Update(id, data);
+        return await _distributionService.Update(id, data);
     }
     
     [HttpPost]
-    public async Task<ResultSummary> Save([FromBody] Data data)
+    public async Task<IList<ResultSummary>> Save([FromBody] Data data)
     {
-        var result = await _dataService.Save(data);
-        
-        result.UpdateServerStatus();
-        return result;
+        IList<ResultSummary> resultSummaries = new List<ResultSummary>();
+        try
+        {
+            resultSummaries = await _distributionService.Save(data);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
+        return resultSummaries;
     }
   
 
     [HttpDelete("/delete/{id}")]
-    public async Task<ResultSummary> Delete([FromRoute] int id)
+    public async Task<IList<ResultSummary>> Delete([FromRoute] int id)
     {
-        var result = await _dataService.Delete(id);
-        result.UpdateServerStatus();
-        return result;
+        return await _distributionService.Delete(id);
     }
 }
