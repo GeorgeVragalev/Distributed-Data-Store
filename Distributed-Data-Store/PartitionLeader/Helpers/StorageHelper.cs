@@ -14,13 +14,17 @@ public static class StorageHelper
 
     private static ResultSummary _server1Status = new ResultSummary(){
         StorageCount = 0,
-        LastProcessedId = 0
+        LastProcessedId = 0,
+        Port = Settings.Server1Port,
+        ServerName = ServerName.Server1
     };
 
     private static ResultSummary _server2Status = new ResultSummary()
     {
         StorageCount = 0,
-        LastProcessedId = 0
+        LastProcessedId = 0,
+        Port = Settings.Server2Port,
+        ServerName = ServerName.Server2
     };
     
     public static string GetOptimalServerUrl()
@@ -46,6 +50,7 @@ public static class StorageHelper
         var optimalServer1 = _partitionLeaderStatus;
         var optimalServer2 = _server1Status;
 
+        /*
         if (_server2Status.StorageCount < optimalServer1.StorageCount)
         {
             optimalServer1 = _server2Status;
@@ -54,6 +59,7 @@ public static class StorageHelper
         {
             optimalServer2 = _server2Status;
         }
+        */
         
         servers.Add(optimalServer1.ServerName);
         servers.Add(optimalServer2.ServerName);

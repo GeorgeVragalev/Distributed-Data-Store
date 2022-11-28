@@ -104,7 +104,9 @@ public class DistributionService : IDistributionService
         //use tcp to save data to other servers
         if (optimalServerNames.Contains(ServerName.Server1))
         {
+            var server1ResponseHttp = await _httpService.Save(data, Settings.Server1);
             var server1Response = _tcpService.TcpSave(data, Settings.Server1TcpSavePort);
+
             if (server1Response != null)
             {
                 server1Response.UpdateServerStatus();
