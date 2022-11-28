@@ -2,5 +2,5 @@
 
 public interface ITcpService
 {
-    public void Run();
+    public Task Run();
 }

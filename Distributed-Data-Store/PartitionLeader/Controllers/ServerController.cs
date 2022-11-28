@@ -16,20 +16,22 @@ namespace PartitionLeader.Controllers;
 [Route("")]
 public class ServerController : ControllerBase
 {
-    private readonly IDataService _dataService;
-    private readonly IHttpService _httpService;
-    private readonly ITcpService _tcpService;
     private readonly IDistributionService _distributionService;
+    private readonly IHttpService _httpService;
 
-    public ServerController(IDataService dataService, IHttpService httpService, ITcpService tcpService,
-        IDistributionService distributionService)
+    public ServerController(IDistributionService distributionService, IHttpService httpService)
     {
-        _dataService = dataService;
-        _httpService = httpService;
-        _tcpService = tcpService;
         _distributionService = distributionService;
+        _httpService = httpService;
     }
 
+    [HttpGet("/check")]
+    public Task<bool> CheckStatus()
+    {
+        var a = _httpService.GetAll(Settings.Server1);
+        return Task.FromResult(true);
+    }
+    
     [HttpGet("/get/{id}")]
     public async Task<KeyValuePair<int, Data>?> GetById([FromRoute] int id)
     {

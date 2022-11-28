@@ -1,7 +1,9 @@
-﻿using Server1.Repositories.DataStorage;
+﻿using Server1.BackgroundTask;
+using Server1.Repositories.DataStorage;
 using Server1.Repositories.SharedStorage;
 using Server1.Services.DataService;
 using Server1.Services.DistributionService;
+using Server1.Services.HealthCheck;
 using Server1.Services.Http;
 using Server1.Services.SyncService;
 using Server1.Services.Tcp;
@@ -22,11 +24,13 @@ public class Startup
         services.AddSingleton<ISyncService, SyncService>();
         services.AddSingleton<IDataService, DataService>();
         services.AddSingleton<IDataStorage, DataStorage>();
+        services.AddSingleton<IHealthCheckService, HealthCheckService>();
         services.AddSingleton<IDistributionService, DistributionService>();
         services.AddSingleton<IHttpService, HttpService>();
         services.AddSingleton<ITcpService, TcpService>();
         services.AddSingleton(typeof(IStorageRepository<>), typeof(StorageRepository<>));
         services.AddHostedService<BackgroundTask.BackgroundTask>();
+        services.AddHostedService<PartitionLeaderHealthCheck>();
     }
 
     public Startup(IConfiguration configuration)

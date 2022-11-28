@@ -17,6 +17,7 @@ public class TcpService : ITcpService
         _dataService = dataService;
     }
 
+    #region Run Server 8081
     public async Task Run()
     {
         Console.WriteLine("Server starting !");
@@ -47,7 +48,7 @@ public class TcpService : ITcpService
         }
     }
 
-    public async Task<string> MessageHandler(string message)
+    private async Task<string> MessageHandler(string message)
     {
         Console.WriteLine("Received message: " + message);
         var deserialized = JsonConvert.DeserializeObject<Data>(message);
@@ -67,4 +68,48 @@ public class TcpService : ITcpService
         var bytes = StreamConverter.MessageToByteArray(message);
         client.GetStream().Write(bytes, 0, bytes.Length);
     }
+    #endregion
+
+    #region SaveTo 8082 Server 2
+
+    public ResultSummary? TcpSave(Data data, int serverPort)
+    {
+        var requestMessage = JsonConvert.SerializeObject(data);
+        var responseMessage = SendMessage(requestMessage, serverPort);
+        
+        var deserialized = JsonConvert.DeserializeObject<ResultSummary>(responseMessage);
+
+        Console.WriteLine(responseMessage);
+        
+        return deserialized;
+    }
+
+    private string SendMessage(string message, int serverPort)
+    {
+        var response = "";
+        try
+        {
+            var client = new TcpClient("127.0.0.1", serverPort);
+            client.NoDelay = true;
+            var messageBytes = StreamConverter.MessageToByteArray(message);
+
+            using (var stream = client.GetStream())
+            {
+                stream.Write(messageBytes, 0, messageBytes.Length);
+
+                // Message sent!  Wait for the response stream of bytes...
+                response = StreamConverter.StreamToMessage(stream);
+            }
+
+            client.Close();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
+        return response;
+    }
+    
+    #endregion
 }

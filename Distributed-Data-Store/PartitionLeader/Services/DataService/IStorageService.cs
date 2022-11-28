@@ -1,6 +1,6 @@
 ﻿using PartitionLeader.Models;
 
-namespace PartitionLeader.Services;
+namespace PartitionLeader.Services.DataService;
 
 public interface IStorageService <T> where T : Entity
 {

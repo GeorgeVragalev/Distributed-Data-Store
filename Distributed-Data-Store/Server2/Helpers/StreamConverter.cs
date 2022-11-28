@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace PartitionLeader.Helpers;
+namespace Server2.Helpers;
 
 public static class StreamConverter{
 

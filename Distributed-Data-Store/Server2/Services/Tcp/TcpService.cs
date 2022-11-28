@@ -1,23 +1,32 @@
 ﻿using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using Newtonsoft.Json;
 using Server2.Configurations;
+using Server2.Helpers;
 using Server2.Models;
+using Server2.Services.DataService;
 
 namespace Server2.Services.Tcp;
 public class TcpService : ITcpService
 {
-    private readonly Encoding _encoding = Encoding.UTF8;
+    private readonly IDataService _dataService;
 
-    public void Run()
+    public TcpService(IDataService dataService)
+    {
+        _dataService = dataService;
+    }
+
+    #region Run Server 8081
+    public async Task Run()
     {
         Console.WriteLine("Server starting !");
  
         // IP Address to listen on. Loopback in this case
         var ipAddr = IPAddress.Loopback;
+        // Port to listen on
+        var port = Settings.Server1TcpSavePort;
         // Create a network endpoint
-        var ep = new IPEndPoint(ipAddr, Settings.Server2TcpSavePort);
+        var ep = new IPEndPoint(ipAddr, port);
         // Create and start a TCP listener
         var listener = new TcpListener(ep);
         listener.Start();
@@ -27,62 +36,36 @@ public class TcpService : ITcpService
         // keep running
         while(true)
         {
-            var sender = listener.AcceptTcpClient();
+            var sender = await listener.AcceptTcpClientAsync();
             // streamToMessage - discussed later
-            var request = StreamToMessage(sender.GetStream());
+            var request = StreamConverter.StreamToMessage(sender.GetStream());
             if (request != null)
             {
-                // var responseMessage = MessageHandler(request);
-                // SendMessage(responseMessage, sender);
+                var responseMessage = await MessageHandler(request);
+                SendMessage(responseMessage, sender);
             }
         }
     }
- 
+
+    private async Task<string> MessageHandler(string message)
+    {
+        Console.WriteLine("Received message: " + message);
+        var deserialized = JsonConvert.DeserializeObject<Data>(message);
+
+        var resultSummary = await _dataService.Save(deserialized);
+        
+        var requestMessage = JsonConvert.SerializeObject(resultSummary);
+
+        Console.WriteLine(deserialized?.FileName);
+        Console.WriteLine(resultSummary.StorageCount);
+        return requestMessage;
+    }
+    
     private void SendMessage(string message, TcpClient client)
     {
         // messageToByteArray- discussed later
-        var bytes = MessageToByteArray(message);
+        var bytes = StreamConverter.MessageToByteArray(message);
         client.GetStream().Write(bytes, 0, bytes.Length);
     }
-
-    private byte[] MessageToByteArray(string message)
-    {
-        // get the size of original message
-        var messageBytes = _encoding.GetBytes(message);
-        var messageSize = messageBytes.Length;
-        // add content length bytes to the original size
-        var completeSize = messageSize + 4;
-        // create a buffer of the size of the complete message size
-        var completeMessage = new byte[completeSize];
-
-        // convert message size to bytes
-        var sizeBytes = BitConverter.GetBytes(messageSize);
-        // copy the size bytes and the message bytes to our overall message to be sent 
-        sizeBytes.CopyTo(completeMessage, 0);
-        messageBytes.CopyTo(completeMessage, 4);
-        return completeMessage;
-    }
-
-    private string StreamToMessage(Stream stream)
-    {
-        // size bytes have been fixed to 4
-        var sizeBytes = new byte[4];
-        // read the content length
-        stream.ReadAsync(sizeBytes, 0, 4);
-        var messageSize = BitConverter.ToInt32(sizeBytes, 0);
-        // create a buffer of the content length size and read from the stream
-        var messageBytes = new byte[messageSize];
-        stream.ReadAsync(messageBytes, 0, messageSize);
-        // convert message byte array to the message string using the encoding
-        var message = _encoding.GetString(messageBytes);
-        string result = null!;
-
-        foreach (var c in message)
-            if (c != '\0')
-            {
-                result += c;
-            }
-
-        return result;
-    }
+    #endregion
 }

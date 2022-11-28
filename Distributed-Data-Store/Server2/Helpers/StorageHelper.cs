@@ -39,7 +39,6 @@ public static class StorageHelper
         return $"{Settings.BaseUrl}{optimalServer.Port}";
     }
     
-    
     public static List<ServerName> GetOptimalServers()
     {
         var servers = new List<ServerName>();
@@ -65,12 +64,11 @@ public static class StorageHelper
     public static void UpdateServerStatus(this ResultSummary? summary)
     {
         if (summary != null)
-            _server2Status = summary;
-        
+            _server1Status = summary;
     }
 
     public static ResultSummary? GetStatus()
     {
-        return _server2Status;
+        return _partitionLeaderStatus;
     }
 }

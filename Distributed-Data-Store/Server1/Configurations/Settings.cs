@@ -6,7 +6,7 @@ public static class Settings
 {
     public static readonly ServerName ServerName = ServerName.Server1;
     
-    public static readonly bool Leader = true;
+    public static bool Leader = true;
     
     public static readonly bool InDocker = false; // set to false when running on localhost
     
