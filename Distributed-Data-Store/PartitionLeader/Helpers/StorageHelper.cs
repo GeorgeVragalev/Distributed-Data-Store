@@ -5,14 +5,16 @@ namespace PartitionLeader.Helpers;
 
 public static class StorageHelper
 {
-    private static ResultSummary _partitionLeaderStatus = new ResultSummary(){
+    private static ResultSummary _partitionLeaderStatus = new ResultSummary()
+    {
         StorageCount = 0,
         LastProcessedId = 0,
         Port = Settings.ThisPort,
         ServerName = Settings.ServerName
     };
 
-    private static ResultSummary _server1Status = new ResultSummary(){
+    private static ResultSummary _server1Status = new ResultSummary()
+    {
         StorageCount = 0,
         LastProcessedId = 0,
         Port = Settings.Server1Port,
@@ -26,7 +28,7 @@ public static class StorageHelper
         Port = Settings.Server2Port,
         ServerName = ServerName.Server2
     };
-    
+
     public static string GetOptimalServerUrl()
     {
         var optimalServer = _partitionLeaderStatus;
@@ -34,7 +36,7 @@ public static class StorageHelper
         {
             optimalServer = _server1Status;
         }
-        
+
         if (optimalServer.StorageCount > _server2Status.StorageCount)
         {
             optimalServer = _server2Status;
@@ -42,7 +44,7 @@ public static class StorageHelper
 
         return $"{Settings.BaseUrl}{optimalServer.Port}";
     }
-    
+
     public static List<ServerName> GetOptimalServers()
     {
         var servers = new List<ServerName>();
@@ -60,7 +62,7 @@ public static class StorageHelper
             optimalServer2 = _server2Status;
         }
         */
-        
+
         servers.Add(optimalServer1.ServerName);
         servers.Add(optimalServer2.ServerName);
 
@@ -70,11 +72,33 @@ public static class StorageHelper
     public static void UpdateServerStatus(this ResultSummary? summary)
     {
         if (summary != null)
-            _server1Status = summary;
+        {
+            switch (summary.ServerName)
+            {
+                case ServerName.PartitionLeader:
+                    _partitionLeaderStatus = summary;
+                    break;
+                case ServerName.Server1:
+                    _server1Status = summary;
+                    break;
+                case ServerName.Server2:
+                    _server2Status = summary;
+                    break;
+            }
+        }
     }
 
     public static ResultSummary? GetStatus()
     {
         return _partitionLeaderStatus;
+    }
+
+    public static IList<ResultSummary>? GetStatusFromServers()
+    {
+        var statuses = new List<ResultSummary>();
+        statuses.Add(_server1Status);
+        statuses.Add(_server2Status);
+        statuses.Add(_partitionLeaderStatus);
+        return statuses;
     }
 }

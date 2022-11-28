@@ -28,7 +28,6 @@ public class ServerController : ControllerBase
     [HttpGet("/check")]
     public Task<bool> CheckStatus()
     {
-        var a = _httpService.GetAll(Settings.Server1);
         return Task.FromResult(true);
     }
     
@@ -45,9 +44,9 @@ public class ServerController : ControllerBase
     }
 
     [HttpGet("/summary")]
-    public async Task<ResultSummary?> GetSummary()
+    public async Task<IList<ResultSummary>?> GetSummary()
     {
-        return await Task.FromResult(StorageHelper.GetStatus());
+        return await Task.FromResult(StorageHelper.GetStatusFromServers());
     }
 
     [HttpPut("/update/{id}")]

@@ -25,9 +25,9 @@ public static class Settings
 
     public static readonly string ThisServerUrl = $"https://{ServerIp}:{ThisPort}"; //docker
 
-    public static readonly string PartitionLeader = $"http://{ServerIp}:{LeaderPort}"; //local
-    public static readonly string Server1 = $"http://{ServerIp}:{Server1Port}"; //local
-    public static readonly string Server2 = $"http://{ServerIp}:{Server2Port}"; //local
+    public static readonly string PartitionLeader = $"https://{ServerIp}:{LeaderPort}"; //local
+    public static readonly string Server1 = $"https://{ServerIp}:{Server1Port}"; //local
+    public static readonly string Server2 = $"https://{ServerIp}:{Server2Port}"; //local
 }
 /*
 to run docker for dininghall container: 

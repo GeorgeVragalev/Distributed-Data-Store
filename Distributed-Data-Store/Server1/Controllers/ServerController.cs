@@ -24,8 +24,6 @@ public class ServerController : ControllerBase
     [HttpGet("/get/{id}")]
     public async Task<KeyValuePair<int, Data>?> GetById([FromRoute] int id)
     {
-        var url = Settings.PartitionLeader;
-        var a = _httpService.GetAll(url);
         return await _distributionService.GetById(id);
     }
 
@@ -72,7 +70,7 @@ public class ServerController : ControllerBase
 
     #region FormBody Endpoints
 
-    [HttpPut("/update/{id}")]
+    [HttpPut("/form/update/{id}")]
     public async Task<Data> Update([FromRoute] int id, [FromForm] DataModel dataModel)
     {
         if (!Settings.Leader)
@@ -87,7 +85,7 @@ public class ServerController : ControllerBase
         return updateResult;
     }
 
-    [HttpPost]
+    [HttpPost("/form/save")]
     public async Task<IList<ResultSummary>> Save([FromForm] DataModel dataModel)
     {
         if (!Settings.Leader)

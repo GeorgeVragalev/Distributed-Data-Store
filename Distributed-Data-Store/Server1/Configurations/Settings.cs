@@ -6,7 +6,7 @@ public static class Settings
 {
     public static readonly ServerName ServerName = ServerName.Server1;
     
-    public static bool Leader = true;
+    public static bool Leader = false;
     
     public static readonly bool InDocker = false; // set to false when running on localhost
     
@@ -25,9 +25,9 @@ public static class Settings
 
     public static readonly string ThisServerUrl = $"https://{ServerIp}:{ThisPort}"; //docker
 
-    public static readonly string PartitionLeader = $"http://{ServerIp}:{LeaderPort}"; //local
-    public static readonly string Server1 = $"http://{ServerIp}:{Server1Port}"; //local
-    public static readonly string Server2 = $"http://{ServerIp}:{Server2Port}"; //local
+    public static readonly string PartitionLeader = $"https://{ServerIp}:{LeaderPort}"; //local
+    public static readonly string Server1 = $"https://{ServerIp}:{Server1Port}"; //local
+    public static readonly string Server2 = $"https://{ServerIp}:{Server2Port}"; //local
 }
 /*
 to run docker for dininghall container: 

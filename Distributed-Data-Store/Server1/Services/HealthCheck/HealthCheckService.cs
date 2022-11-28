@@ -41,10 +41,8 @@ public class HealthCheckService : IHealthCheckService
         try
         {
             var url = Settings.PartitionLeader;
-            // var a = _httpService.GetAll(url);
-            /*
+
             using var client = new HttpClient();
-            var url = Settings.PartitionLeader;
             
             var response = await client.GetAsync($"{url}/check");
             
@@ -52,7 +50,7 @@ public class HealthCheckService : IHealthCheckService
             var deserialized = JsonConvert.DeserializeObject<bool>(dataAsJson);
             
             PrintConsole.Write($"Partition leader is healthy", ConsoleColor.Green);
-            return deserialized;*/
+            return deserialized;
         }
         catch (Exception e)
         {
