@@ -25,7 +25,7 @@ public class DataService : IDataService
 
     public async Task<ResultSummary> Save(Data data)
     {
-        var id = IdGenerator.GenerateId();
+        var id = data.Id;
         return await _dataStorage.Save(id, data);
     }
 

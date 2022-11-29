@@ -1,14 +1,14 @@
-﻿using Server2.Services.Tcp;
+﻿using PartitionLeader.Services.HealthCheck;
 
-namespace Server2.BackgroundTask;
+namespace PartitionLeader.BackgroundTask;
 
-public class BackgroundTask : BackgroundService
+public class PartitionLeaderHealthCheck : BackgroundService
 {
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly Timer _timer;
     private int number;
 
-    public BackgroundTask(IServiceScopeFactory serviceScopeFactory)
+    public PartitionLeaderHealthCheck(IServiceScopeFactory serviceScopeFactory)
     {
         _serviceScopeFactory = serviceScopeFactory;
     }
@@ -22,7 +22,7 @@ public class BackgroundTask : BackgroundService
     {
         await Task.Delay(5000);
         using var scope = _serviceScopeFactory.CreateScope();
-        var scoped = scope.ServiceProvider.GetRequiredService<ITcpService>();
-        await scoped.Run();
+        var scoped = scope.ServiceProvider.GetRequiredService<IHealthCheckService>();
+        await scoped.CheckHealth();
     }
 }

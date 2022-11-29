@@ -13,12 +13,16 @@ namespace Server1.Controllers;
 public class ServerController : ControllerBase
 {
     private readonly IDistributionService _distributionService;
-    private readonly IHttpService _httpService;
 
-    public ServerController(IDistributionService distributionService, IHttpService httpService)
+    public ServerController(IDistributionService distributionService)
     {
         _distributionService = distributionService;
-        _httpService = httpService;
+    }
+    
+    [HttpGet("/check")]
+    public Task<bool> CheckStatus()
+    {
+        return Task.FromResult(true);
     }
 
     [HttpGet("/get/{id}")]

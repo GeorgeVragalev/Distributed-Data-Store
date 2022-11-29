@@ -12,4 +12,14 @@ public static class IdGenerator
         _mutex.ReleaseMutex();
         return Id;
     }
+    
+    public static int SetLatestId()
+    {
+        
+        
+        _mutex.WaitOne();
+        Id++;
+        _mutex.ReleaseMutex();
+        return Id;
+    }
 }

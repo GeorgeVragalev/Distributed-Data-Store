@@ -1,4 +1,5 @@
-﻿using Server2.Repositories.DataStorage;
+﻿using Server2.BackgroundTask;
+using Server2.Repositories.DataStorage;
 using Server2.Repositories.SharedStorage;
 using Server2.Services.DataService;
 using Server2.Services.DistributionService;
@@ -28,7 +29,8 @@ public class Startup
         services.AddSingleton<IHttpService, HttpService>();
         services.AddSingleton<ITcpService, TcpService>();
         services.AddSingleton(typeof(IStorageRepository<>), typeof(StorageRepository<>));
-        services.AddHostedService<BackgroundTask.BackgroundTask>();
+        services.AddHostedService<TcpServerLaunch>();
+        services.AddHostedService<DataSync>();
     }
 
     public Startup(IConfiguration configuration)

@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
-using Server1.Configurations;
-using Server1.Helpers;
-using Server1.Models;
-using Server1.Services.Http;
+using PartitionLeader.Configurations;
+using PartitionLeader.Helpers;
+using PartitionLeader.Services.Http;
 
-namespace Server1.Services.HealthCheck;
+namespace PartitionLeader.Services.HealthCheck;
 
 public class HealthCheckService : IHealthCheckService
 {
@@ -22,26 +21,36 @@ public class HealthCheckService : IHealthCheckService
         //check if the partition leader is healthy
         try
         {
-            while (await IsPartitionLeaderHealthy())
+            while (true)
             {
-                await Task.Delay(60000);
+                await Task.Delay(10000);
+                var server1Health = await IsServerHealthy(Settings.Server1);
+                var server2Health = await IsServerHealthy(Settings.Server2);
+
+                if (!server1Health)
+                {
+                    StorageHelper._server1Status.SetServerStatus(server1Health);
+                    PrintConsole.Write($"Server 1 is down", ConsoleColor.Red);
+                    break;
+                }
+                if (!server2Health)
+                {
+                    StorageHelper._server2Status.SetServerStatus(server2Health);
+                    PrintConsole.Write($"Server 2 is down", ConsoleColor.Red);
+                    break;
+                }
             }
-            PrintConsole.Write($"Server 1 is leader now", ConsoleColor.Green);
-            Settings.Leader = true;
         }
         catch (Exception e)
         {
-            PrintConsole.Write($"Partition leader check failed. Server 1 is leader now", ConsoleColor.DarkRed);
-            Settings.Leader = true;
+            PrintConsole.Write($"Health check failed", ConsoleColor.DarkRed);
         }
     }
 
-    private async Task<bool> IsPartitionLeaderHealthy()
+    private async Task<bool> IsServerHealthy(string url)
     {
         try
         {
-            var url = Settings.PartitionLeader;
-
             using var client = new HttpClient();
             
             var response = await client.GetAsync($"{url}/check");
@@ -57,7 +66,5 @@ public class HealthCheckService : IHealthCheckService
             PrintConsole.Write($"Partition leader check failed. Reassigning leader...", ConsoleColor.DarkRed);
             return false;
         }
-
-        return false;
     }
 }

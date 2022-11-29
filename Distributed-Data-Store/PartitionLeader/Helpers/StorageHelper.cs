@@ -5,37 +5,42 @@ namespace PartitionLeader.Helpers;
 
 public static class StorageHelper
 {
-    private static ResultSummary _partitionLeaderStatus = new ResultSummary()
+    public static ResultSummary _partitionLeaderStatus = new ResultSummary()
     {
         StorageCount = 0,
         LastProcessedId = 0,
-        Port = Settings.ThisPort,
-        ServerName = Settings.ServerName
+        Port = Settings.LeaderPort,
+        ServerName = Settings.ServerName,
+        IsRunning = true
     };
 
-    private static ResultSummary _server1Status = new ResultSummary()
+    public static ResultSummary _server1Status = new ResultSummary()
     {
         StorageCount = 0,
         LastProcessedId = 0,
         Port = Settings.Server1Port,
-        ServerName = ServerName.Server1
+        ServerName = ServerName.Server1,
+        IsRunning = true
     };
 
-    private static ResultSummary _server2Status = new ResultSummary()
+    public static ResultSummary _server2Status = new ResultSummary()
     {
         StorageCount = 0,
         LastProcessedId = 0,
         Port = Settings.Server2Port,
-        ServerName = ServerName.Server2
+        ServerName = ServerName.Server2,
+        IsRunning = true
     };
+
+    public static void SetServerStatus(this ResultSummary server, bool status)
+    {
+        server.IsRunning = status;
+    }
+    
 
     public static string GetOptimalServerUrl()
     {
-        var optimalServer = _partitionLeaderStatus;
-        if (optimalServer.StorageCount > _server1Status.StorageCount)
-        {
-            optimalServer = _server1Status;
-        }
+        var optimalServer = _server1Status;
 
         if (optimalServer.StorageCount > _server2Status.StorageCount)
         {
@@ -54,11 +59,11 @@ public static class StorageHelper
 
         if (_server2Status.StorageCount < optimalServer2.StorageCount)
         {
-            optimalServer1 = _server2Status;
+            optimalServer2 = _server2Status;
         }
         else if (_server2Status.StorageCount < optimalServer1.StorageCount)
         {
-            optimalServer2 = _server2Status;
+            optimalServer1 = _server2Status;
         }
 
         servers.Add(optimalServer1.ServerName);

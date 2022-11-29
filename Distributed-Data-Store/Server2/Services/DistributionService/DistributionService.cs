@@ -73,14 +73,11 @@ public class DistributionService : IDistributionService
         return await _dataService.Update(id, data);
     }
 
-    public async Task<IList<ResultSummary>> Save(Data data)
+    public async Task<ResultSummary> Save(Data data)
     {
-        var results = new List<ResultSummary>();
 
         var result = await _dataService.Save(data);
         result.UpdateServerStatus();
-
-        results.Add(result);
 
         //use tcp to save data to other servers
         if (Settings.Leader)
@@ -89,16 +86,14 @@ public class DistributionService : IDistributionService
             if (server2Response != null)
             {
                 server2Response.UpdateServerStatus();
-                results.Add(server2Response);
             }
         }
 
-        return results;
+        return result;
     }
 
-    public async Task<IList<ResultSummary>> Delete(int id)
+    public async Task<ResultSummary> Delete(int id)
     {
-        var results = new List<ResultSummary>();
         var result = await _dataService.Delete(id);
         result.UpdateServerStatus();
 
@@ -109,10 +104,9 @@ public class DistributionService : IDistributionService
             if (server2Result != null)
             {
                 server2Result.UpdateServerStatus();
-                results.Add(server2Result);
             }
         }
 
-        return results;
+        return result;
     }
 }

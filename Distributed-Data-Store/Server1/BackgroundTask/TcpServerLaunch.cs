@@ -3,13 +3,13 @@ using Server1.Services.Tcp;
 
 namespace Server1.BackgroundTask;
 
-public class BackgroundTask : BackgroundService
+public class TcpServerLaunch : BackgroundService
 {
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly Timer _timer;
     private int number;
 
-    public BackgroundTask(IServiceScopeFactory serviceScopeFactory)
+    public TcpServerLaunch(IServiceScopeFactory serviceScopeFactory)
     {
         _serviceScopeFactory = serviceScopeFactory;
     }

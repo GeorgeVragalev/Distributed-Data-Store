@@ -11,10 +11,13 @@ public class ResultSummary
     public int Port { get; set; }
 
     public ServerName ServerName { get; set; }
+    
+    public bool IsRunning { get; set; }
 
     public ResultSummary()
     {
         Port = Settings.ThisPort;
         ServerName = Settings.ServerName;
+        IsRunning = true;
     }
 }

@@ -3,13 +3,13 @@ using PartitionLeader.Services.SyncService;
 
 namespace PartitionLeader.BackgroundTask;
 
-public class BackgroundTask : BackgroundService
+public class DataSync : BackgroundService
 {
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly Timer _timer;
     private int number;
 
-    public BackgroundTask(IServiceScopeFactory serviceScopeFactory)
+    public DataSync(IServiceScopeFactory serviceScopeFactory)
     {
         _serviceScopeFactory = serviceScopeFactory;
     }

@@ -93,6 +93,8 @@ public class DistributionService : IDistributionService
 
         var optimalServerNames = StorageHelper.GetOptimalServers();
 
+        data.Id = IdGenerator.GenerateId();
+
         if (optimalServerNames.Contains(Settings.ServerName))
         {
             var result = await _dataService.Save(data);

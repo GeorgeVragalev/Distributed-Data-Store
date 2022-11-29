@@ -29,7 +29,8 @@ public class Startup
         services.AddSingleton<IHttpService, HttpService>();
         services.AddSingleton<ITcpService, TcpService>();
         services.AddSingleton(typeof(IStorageRepository<>), typeof(StorageRepository<>));
-        services.AddHostedService<BackgroundTask.BackgroundTask>();
+        services.AddHostedService<DataSync>();
+        services.AddHostedService<TcpServerLaunch>();
         services.AddHostedService<PartitionLeaderHealthCheck>();
     }
 

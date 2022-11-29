@@ -12,12 +12,16 @@ namespace Server2.Controllers;
 public class ServerController : ControllerBase
 {
     private readonly IDistributionService _distributionService;
-    private readonly IHttpService _httpService;
 
-    public ServerController(IDistributionService distributionService, IHttpService httpService)
+    public ServerController(IDistributionService distributionService)
     {
         _distributionService = distributionService;
-        _httpService = httpService;
+    }
+
+    [HttpGet("/check")]
+    public Task<bool> CheckStatus()
+    {
+        return Task.FromResult(true);
     }
 
     [HttpGet("/get/{id}")]
@@ -45,9 +49,9 @@ public class ServerController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IList<ResultSummary>> Save([FromBody] Data data)
+    public async Task<ResultSummary> Save([FromBody] Data data)
     {
-        IList<ResultSummary> resultSummaries = new List<ResultSummary>();
+        ResultSummary resultSummaries = new ResultSummary();
         try
         {
             resultSummaries = await _distributionService.Save(data);
@@ -62,7 +66,7 @@ public class ServerController : ControllerBase
   
 
     [HttpDelete("/delete/{id}")]
-    public async Task<IList<ResultSummary>> Delete([FromRoute] int id)
+    public async Task<ResultSummary> Delete([FromRoute] int id)
     {
         return await _distributionService.Delete(id);
     }

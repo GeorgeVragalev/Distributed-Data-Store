@@ -41,7 +41,6 @@ public class HttpService : IHttpService
             var dataAsJson = await response.Content.ReadAsStringAsync();
             var deserialized = JsonConvert.DeserializeObject<IDictionary<int, Data>>(dataAsJson);
             
-            PrintConsole.Write($"Got data from url {url}", ConsoleColor.Green);
             return deserialized;
         }
         catch (Exception e)

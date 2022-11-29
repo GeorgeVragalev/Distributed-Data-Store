@@ -76,15 +76,11 @@ public class DistributionService : IDistributionService
     public async Task<IList<ResultSummary>> Save(Data data)
     {
         var results = new List<ResultSummary>();
-
-        var result = await _dataService.Save(data);
-        result.UpdateServerStatus();
-
-        results.Add(result);
-
         //use tcp to save data to other servers
         if (Settings.Leader)
         {
+            data.Id = IdGenerator.GenerateId();
+
             var server2Response = _tcpService.TcpSave(data, Settings.Server2TcpSavePort);
             if (server2Response != null)
             {
@@ -92,6 +88,11 @@ public class DistributionService : IDistributionService
                 results.Add(server2Response);
             }
         }
+        
+        var result = await _dataService.Save(data);
+        result.UpdateServerStatus();
+
+        results.Add(result);
 
         return results;
     }

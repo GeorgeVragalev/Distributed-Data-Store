@@ -17,12 +17,12 @@ namespace PartitionLeader.Controllers;
 public class ServerController : ControllerBase
 {
     private readonly IDistributionService _distributionService;
-    private readonly IHttpService _httpService;
+    private readonly IDataService _dataService;
 
-    public ServerController(IDistributionService distributionService, IHttpService httpService)
+    public ServerController(IDistributionService distributionService, IDataService dataService)
     {
         _distributionService = distributionService;
-        _httpService = httpService;
+        _dataService = dataService;
     }
 
     [HttpGet("/check")]
@@ -31,14 +31,20 @@ public class ServerController : ControllerBase
         return Task.FromResult(true);
     }
     
-    [HttpGet("/get/{id}")]
-    public async Task<KeyValuePair<int, Data>?> GetById([FromRoute] int id)
+    [HttpGet("/servers/get/{id}")]
+    public async Task<KeyValuePair<int, Data>?> GetFromServersById([FromRoute] int id)
     {
         return await _distributionService.GetById(id);
     }
+    
+    [HttpGet("/get/{id}")]
+    public async Task<KeyValuePair<int, Data>?> GetById([FromRoute] int id)
+    {
+        return await _dataService.GetById(id);
+    }
 
     [HttpGet("/all")]
-    public async Task<IDictionary<int, Data>?> GetAll()
+    public async Task<IDictionary<int, Data>?> GetFromAllServers()
     {
         return await _distributionService.GetAll();
     }
@@ -59,7 +65,7 @@ public class ServerController : ControllerBase
         return updateResult;
     }
 
-    [HttpPost]
+    [HttpPost("/save")]
     public async Task<IList<ResultSummary>> Save([FromForm] DataModel dataModel)
     {
         var data = dataModel.Map();
@@ -68,6 +74,22 @@ public class ServerController : ControllerBase
         try
         {
             resultSummaries = await _distributionService.Save(data);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
+        return resultSummaries;
+    }
+    
+    [HttpPost]
+    public async Task<ResultSummary> Save([FromBody] Data data)
+    {
+        ResultSummary resultSummaries = new ResultSummary();
+        try
+        {
+            resultSummaries = await _dataService.Save(data);
         }
         catch (Exception e)
         {
