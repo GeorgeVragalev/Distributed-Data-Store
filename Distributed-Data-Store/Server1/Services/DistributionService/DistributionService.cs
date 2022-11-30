@@ -97,9 +97,8 @@ public class DistributionService : IDistributionService
         return results;
     }
 
-    public async Task<IList<ResultSummary>> Delete(int id)
+    public async Task<ResultSummary> Delete(int id)
     {
-        var results = new List<ResultSummary>();
         var result = await _dataService.Delete(id);
         result.UpdateServerStatus();
 
@@ -110,10 +109,9 @@ public class DistributionService : IDistributionService
             if (server2Result != null)
             {
                 server2Result.UpdateServerStatus();
-                results.Add(server2Result);
             }
         }
 
-        return results;
+        return result;
     }
 }

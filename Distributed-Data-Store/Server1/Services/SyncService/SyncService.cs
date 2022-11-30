@@ -1,4 +1,5 @@
-﻿using Server1.Configurations;
+﻿using Newtonsoft.Json;
+using Server1.Configurations;
 using Server1.Helpers;
 using Server1.Models;
 using Server1.Services.DataService;
@@ -38,17 +39,77 @@ public class SyncService : ISyncService
 
     private async Task CheckDataBackup(KeyValuePair<int, Data> data)
     {
-        var backupServer1 = await _httpService.GetById(data.Key, Settings.Server2);
-        var backupServer2 = await _httpService.GetById(data.Key, Settings.PartitionLeader);
+        KeyValuePair<int, Data>? backupServer1 = null;
+        KeyValuePair<int, Data>? backupServer2 = null;
+        if (StorageHelper._server2Status.IsRunning)
+        {
+            try
+            {
+                backupServer1 = await _httpService.GetById(data.Key, Settings.Server2);
+            }
+            catch (Exception e)
+            {
+                StorageHelper._server2Status.IsRunning = false;
+            }
+        }
 
-        if (backupServer1?.Value == null && backupServer2?.Value == null)
+        if (StorageHelper._partitionLeaderStatus.IsRunning)
+        {
+            try
+            {
+                backupServer2 = await _httpService.GetById(data.Key, Settings.PartitionLeader);
+            }
+            catch (Exception e)
+            {
+                StorageHelper._partitionLeaderStatus.IsRunning = false;
+            }
+        }
+
+        if (backupServer1?.Value == null && backupServer2?.Value == null && (StorageHelper._partitionLeaderStatus.IsRunning || StorageHelper._server2Status.IsRunning))
         {
             var optimalServerUrl = StorageHelper.GetOptimalServerUrl();
-            PrintConsole.Write($"No data backup found for id: {data.Key}. Creating a backup on server: {optimalServerUrl}", ConsoleColor.Red);
+
+            if (!await IsServerHealthy(optimalServerUrl))
+            {
+                optimalServerUrl = Settings.PartitionLeader;
+            }
+
+            if (!await IsServerHealthy(optimalServerUrl))
+            {
+                optimalServerUrl = Settings.Server2;
+            }
+
+            if (!await IsServerHealthy(optimalServerUrl))
+            {
+                return;
+            }
+
+            PrintConsole.Write(
+                $"No data backup found for id: {data.Key}. Creating a backup on server: {optimalServerUrl}",
+                ConsoleColor.Red);
 
             var result = await _httpService.Save(data.Value, optimalServerUrl);
-            
+
             result?.UpdateServerStatus();
+        }
+    }
+
+    public async Task<bool> IsServerHealthy(string url)
+    {
+        try
+        {
+            using var client = new HttpClient();
+
+            var response = await client.GetAsync($"{url}/check");
+
+            var dataAsJson = await response.Content.ReadAsStringAsync();
+            var deserialized = JsonConvert.DeserializeObject<bool>(dataAsJson);
+
+            return deserialized;
+        }
+        catch (Exception e)
+        {
+            return false;
         }
     }
 }

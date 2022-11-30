@@ -59,7 +59,7 @@ public class DistributionService : IDistributionService
                 }
             }
         }
-        else if(resultDictionary != null)
+        else if (resultDictionary != null)
         {
             var server2Data = await _httpService.GetAll(Settings.Server2);
 
@@ -136,22 +136,17 @@ public class DistributionService : IDistributionService
 
         var server1Result = await _httpService.Delete(id, Settings.Server1);
         var server2Result = await _httpService.Delete(id, Settings.Server2);
-        
+
         if (server1Result != null)
         {
-            foreach (var resultSummary in server1Result)
-            {
-                resultSummary.UpdateServerStatus();
-                results.Add(resultSummary);
-            }
+            server1Result.UpdateServerStatus();
+            results.Add(server1Result);
         }
+
         if (server2Result != null)
         {
-            foreach (var resultSummary in server2Result)
-            {
-                resultSummary.UpdateServerStatus();
-                results.Add(resultSummary);
-            }
+            server2Result.UpdateServerStatus();
+            results.Add(server2Result);
         }
 
         return results;

@@ -22,10 +22,8 @@ public class HttpService : IHttpService
         }
         catch (Exception e)
         {
-            PrintConsole.Write($"Failed to get by id: {id}", ConsoleColor.DarkRed);
+            return null;
         }
-
-        return null;
     }
     
 
@@ -102,7 +100,7 @@ public class HttpService : IHttpService
         return null;
     }
 
-    public async Task<IList<ResultSummary>?> Delete(int id, string url)
+    public async Task<ResultSummary?> Delete(int id, string url)
     {
         try
         {
@@ -111,7 +109,7 @@ public class HttpService : IHttpService
             var response = await client.DeleteAsync($"{url}/delete/{id}");
             
             var dataAsJson = await response.Content.ReadAsStringAsync();
-            var deserialized = JsonConvert.DeserializeObject<IList<ResultSummary>>(dataAsJson);
+            var deserialized = JsonConvert.DeserializeObject<ResultSummary>(dataAsJson);
             
             PrintConsole.Write($"Deleted data from url {url} with id: {id}", ConsoleColor.Green);
 

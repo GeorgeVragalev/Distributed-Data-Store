@@ -22,10 +22,8 @@ public class HttpService : IHttpService
         }
         catch (Exception e)
         {
-            PrintConsole.Write($"Failed get by id: {id}", ConsoleColor.DarkRed);
+            return null;
         }
-
-        return null;
     }
     
 

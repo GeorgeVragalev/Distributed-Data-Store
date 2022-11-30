@@ -13,10 +13,12 @@ namespace Server1.Controllers;
 public class ServerController : ControllerBase
 {
     private readonly IDistributionService _distributionService;
+    private readonly IDataService _dataService;
 
-    public ServerController(IDistributionService distributionService)
+    public ServerController(IDistributionService distributionService, IDataService dataService)
     {
         _distributionService = distributionService;
+        _dataService = dataService;
     }
     
     [HttpGet("/check")]
@@ -50,24 +52,24 @@ public class ServerController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IList<ResultSummary>> Save([FromBody] Data data)
+    public async Task<ResultSummary> Save([FromBody] Data data)
     {
-        IList<ResultSummary> resultSummaries = new List<ResultSummary>();
+        ResultSummary resultSummary = new ResultSummary();
         try
         {
-            resultSummaries = await _distributionService.Save(data);
+            resultSummary = await _dataService.Save(data);
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
         }
 
-        return resultSummaries;
+        return resultSummary;
     }
   
 
     [HttpDelete("/delete/{id}")]
-    public async Task<IList<ResultSummary>> Delete([FromRoute] int id)
+    public async Task<ResultSummary> Delete([FromRoute] int id)
     {
         return await _distributionService.Delete(id);
     }

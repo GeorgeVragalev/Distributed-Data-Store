@@ -9,5 +9,5 @@ public interface IDistributionService
     public Task<IDictionary<int, Data>?> GetAll();
     public Task<Data> Update(int id, Data data);
     public Task<IList<ResultSummary>> Save(Data data);
-    public Task<IList<ResultSummary>> Delete(int id);
+    public Task<ResultSummary> Delete(int id);
 }

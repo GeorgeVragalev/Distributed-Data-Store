@@ -43,6 +43,13 @@ public class ServerController : ControllerBase
         return await _dataService.GetById(id);
     }
 
+    
+    [HttpGet("/local/all")]
+    public async Task<IDictionary<int, Data>?> GetAll()
+    {
+        return await _distributionService.GetAll();
+    }
+    
     [HttpGet("/all")]
     public async Task<IDictionary<int, Data>?> GetFromAllServers()
     {

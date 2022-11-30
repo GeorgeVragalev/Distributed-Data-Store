@@ -18,15 +18,12 @@ public class HttpService : IHttpService
             var dataAsJson = await response.Content.ReadAsStringAsync();
             var deserialized = JsonConvert.DeserializeObject<KeyValuePair<int, Data>>(dataAsJson);
             
-            PrintConsole.Write($"Got data from url with id: {id}", ConsoleColor.Green);
             return deserialized;
         }
         catch (Exception e)
         {
-            PrintConsole.Write($"Failed get by id: {id}", ConsoleColor.DarkRed);
+            return null;
         }
-
-        return null;
     }
     
 
